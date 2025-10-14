@@ -7,14 +7,15 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import Swal from 'sweetalert2'
+const config = useRuntimeConfig()
 
 // import { useRoute } from 'vue-router';
 
-let client_id1 = '0195360c-de27-7758-a20b-67ab4a3085df'
-let client_sec1 = 'b9e8684a5b8aad3d49e6387c0a8e8bc70c7ccee2'
+let client_id1 = config.public.clientId;
+let client_sec1 = config.public.clientSecret;
 
-let client_id2 = '66f416cd-3945-4ff2-8ef8-ee7b8219d0d0'
-let client_sec2 = 'F1vlLszBVL5gzYI5u6WjlAfrBN1G4Msx'
+let client_id2 = config.public.clientId1;
+let client_sec2 = config.public.clientSecret1;
 
 // let redirect_uri = `${window.location.origin}/provider/callback_token/`;
 // let url = "https://moph.id.th/api/v1/token"

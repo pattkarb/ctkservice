@@ -15,6 +15,15 @@ export default defineNuxtConfig({
       ]
     }
   },
+  runtimeConfig: {
+    public: {
+      apiUrl: process.env.API_URL || '',
+      clientId: process.env.CLIENT_ID || '',
+      clientSecret: process.env.CLIENT_SECRET || '',
+      clientId1: process.env.CLIENT_ID1 || '',
+      clientSecret1: process.env.CLIENT_SECRET1 || ''
+    }
+  },
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',

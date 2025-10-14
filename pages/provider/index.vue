@@ -18,6 +18,7 @@
 
 <script setup>
     import { useRoute } from 'vue-router';
+    const config = useRuntimeConfig()
     const route = useRoute();
     useHead({
         title: `ProviderId`,
@@ -27,7 +28,7 @@
     });
 
     let health_link = "https://moph.id.th";
-    let client_id = "0195360c-de27-7758-a20b-67ab4a3085df";
+    let client_id = config.public.clientId;
     let redirect_uri = `${window.location.origin}/provider/callback`;
     let response_type = "code";
     function CallProvider(){

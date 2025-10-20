@@ -171,13 +171,5 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'Kanit', sans-serif;
-    text-shadow: 0cqmax(0 0 5px #000);
-    font-size: 18px;
-    align-items: center;
-    justify-content: center;
-}
+
 </style>

@@ -1,12 +1,15 @@
 <template>
-    <div class="layout-container">
+    <div class="container layout-container">
         <header>
             <nav>
-                <h1 class="logo">Ctk@Service</h1>
+                <div class="logo">
+                    <img src="/images/hospital.png" width="35px" />
+                    <span style="font-size:1.5rem; font-weight: bolder; color:red;">C</span>tk<span style="font-size:1.5rem; font-weight: bolder; color:blue;">@</span>Service
+                </div>
                 <NuxtLink to="/">Home</NuxtLink> |
                 <NuxtLink to="/products/detail">Posts</NuxtLink> |
-                <NuxtLink to="/about">About</NuxtLink>
-                <NuxtLink v-if="showLogin" to="/provider">Login</NuxtLink> |
+                <NuxtLink to="/about">About</NuxtLink> |
+                <NuxtLink v-if="showLogin" to="/provider">Login</NuxtLink> 
                 <NuxtLink v-if="showLogout" @click="logout">Logout</NuxtLink>
             </nav>
         </header>
@@ -68,51 +71,3 @@ onMounted(async () => {
 
 </script>
 
-<style scoped>
-.layout-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-header {
-    flex-shrink: 0;
-}
-
-footer {
-    flex-shrink: 0;
-    color: #555;
-    padding: 5px 0;
-    margin-top: auto;
-}
-
-nav {
-    margin: 5px auto;
-    background: #182a60;
-    color: white;
-    padding: 3px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-    margin-left: 12px;
-    font-size: 18px;
-    padding: 10px
-}
-
-nav a:hover {
-    color: coral;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    margin-right: auto;
-    margin-left: 10px;
-    color: rgb(238, 231, 237);
-}
-</style>

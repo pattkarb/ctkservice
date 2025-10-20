@@ -12,9 +12,13 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-      ]
+      ],
+
     }
   },
+  css:[
+    '~/assets/css/main.css',
+  ],
   runtimeConfig: {
     public: {
       apiUrl: process.env.API_URL || '',

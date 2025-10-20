@@ -75,7 +75,7 @@ onMounted(async () => {
                         localStorage.setItem('provider_token_type', provider.data.data.token_type);
                         localStorage.setItem('provider_account_id', provider.data.data.account_id);
                         localStorage.setItem('provider_account_username', provider.data.data.username);
-                       
+                    
                         try {
                             let url = "https://provider.id.th/api/v1/services/profile"
                             let profile = await axios.get(url, {
@@ -86,7 +86,9 @@ onMounted(async () => {
                                     'secret-key': client_sec2,
                                 }
                             });
+
                             //console.log('Profile data:', profile.data);
+                            
                             if (profile.status === 'success' || profile.status === 200) {
                                 localStorage.setItem('provider_profile', JSON.stringify(profile.data.data));
                                 await Swal.fire({
@@ -99,6 +101,7 @@ onMounted(async () => {
                                 })
                                 window.location.href = '/';
                             }
+                            
                         } catch (e) {
                             Swal.fire({
                             icon: 'error',

@@ -6,11 +6,26 @@
                     <img src="/images/hospital.png" width="35px" />
                     <span style="font-size:1.5rem; font-weight: bolder; color:red;">C</span>tk<span style="font-size:1.5rem; font-weight: bolder; color:blue;">@</span>Service
                 </div>
-                <NuxtLink to="/">Home</NuxtLink> |
-                <NuxtLink to="/products/detail">Posts</NuxtLink> |
-                <NuxtLink to="/about">About</NuxtLink> |
-                <NuxtLink v-if="showLogin" to="/provider">Login</NuxtLink> 
-                <NuxtLink v-if="showLogout" @click="logout">Logout</NuxtLink>
+                <NuxtLink to="/">
+                    <i class="bi bi-house-door-fill"></i>
+                    Home
+                </NuxtLink> 
+                <NuxtLink to="/products/detail">
+                    <i class="bi bi-house-door-fill"></i>
+                    Posts
+                </NuxtLink> 
+                <NuxtLink to="/about">
+                    <i class="bi bi-file-person-fill"></i>
+                    About
+                </NuxtLink>
+                <NuxtLink v-if="showLogin" to="/provider">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Login
+                </NuxtLink> 
+                <NuxtLink v-if="showLogout" @click="logout">
+                    Logout
+                    <i class="bi bi-box-arrow-left"></i>
+                    </NuxtLink>
             </nav>
         </header>
         <div>

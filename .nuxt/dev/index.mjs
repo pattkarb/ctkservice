@@ -928,7 +928,7 @@ const _inlineRuntimeConfig = {
     "clientId1": "66f416cd-3945-4ff2-8ef8-ee7b8219d0d0",
     "clientSecret1": "F1vlLszBVL5gzYI5u6WjlAfrBN1G4Msx",
     "content": {
-      "wsUrl": "ws://localhost:4000/"
+      "wsUrl": "ws://localhost:4001/"
     },
     "mdc": {
       "components": {
@@ -1361,7 +1361,7 @@ const _pUIwq5FbnfFD5GhGY26IiK_DUqzL4WHRVqRqLa70878 = (function(nitro) {
 
 const rootDir = "D:/project/ctkservice";
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"},{"name":"description","content":"Ctk@HosPital :-"}],"link":[{"rel":"icon","type":"image/x-icon","href":"/favicon.ico"}],"style":[],"script":[],"noscript":[],"title":"Ctk@HosPital :-"};
+const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"},{"name":"description","content":"Ctk@HosPital :-"}],"link":[{"rel":"icon","type":"image/x-icon","href":"/favicon.ico"},{"rel":"stylesheet","href":"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"}],"style":[],"script":[],"noscript":[],"title":"Ctk@HosPital :-"};
 
 const appRootTag = "div";
 
@@ -1465,22 +1465,7 @@ _f5AU3CcflFzA45M9xSpZmk7gpdYb4s2RyofmctGLgbk,
 _06torauePxwX4U8RPFH_iuciBizccDjebaMnivIjAw
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1853e-ioZrGTc2VBdEscykjhsxBpEYezI\"",
-    "mtime": "2025-10-20T04:50:27.224Z",
-    "size": 99646,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"578ac-5BjgPTSDnnthqHBtPdE2XVT80uQ\"",
-    "mtime": "2025-10-20T04:50:27.225Z",
-    "size": 358572,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));

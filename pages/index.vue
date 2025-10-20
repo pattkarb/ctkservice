@@ -5,13 +5,18 @@
         <img src="/images/my.jpg" width="35px" />
 
         <div>
+            <NuxtLink to="/provider/profile">
+                    Profiles
+            </NuxtLink> 
+        </div>
+
+        <div>
             <h4 ref="ptName"></h4>
             ยินดีต้อนรับเข้าสู่ระบบ
             <h5 ref="fullname"></h5>
             <h3 ref="hash_cid"></h3>
-            <h1 ref="moph_access_token"></h1>
         </div>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente voluptates eos quae, consequatur, consectetur iure iusto provident tenetur labore velit repellendus in perferendis suscipit, magnam numquam quidem at voluptate odit.</p>
+        <h3 ref="moph_access_token"></h3>
     </div>
 </template>
 
@@ -34,7 +39,7 @@
     const hash_cid = ref('');
 
     function handleSuccessfulLogin() {
-        moph_access_token.value = localStorage.getItem('moph_access_token') || null;
+        moph_access_token.value = localStorage.getItem('moph_access_token') || '';
         if (moph_access_token.value) {
             const profile = JSON.parse(localStorage.getItem('provider_profile')) || '{}';
             const organization = profile.organization[0] || {};
@@ -48,13 +53,24 @@
         }
     }
 
+    function loadProfile() {
+        if(userStore.isLoggedIn) {
+            const decoded = useJwtDecoder(localStorage.getItem('moph_access_token'));
+            if(decoded) {
+                const user_id = decoded.scopes_detail.id_card;
+                
+            }
+            
+        } else {
+            console.log('not login!!')
+        }
+    }
+
     onMounted(() => {
         handleSuccessfulLogin();
-        ptName.value.innerText = `Login Name: ${userStore.username || ''}`;
-        fullname.value.innerText = `Full Name: ${userStore.fullname || ''}`;
-        hash_cid.value.innerText = `Hash CID: ${userStore.hash_cid || ''}`;
-
+        loadProfile();
     });
+
 
 </script>
 <style scoped>

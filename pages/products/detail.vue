@@ -1,4 +1,6 @@
 <template>
+    <br/>
+    <br/>
     <h5>detail สินค้า 001</h5>
     <p ref="ptName"></p>
 </template>
@@ -25,15 +27,15 @@ onMounted(async () => {
         
     };
 
-    axios.post('http://61.19.112.116:9000/api/data/select', payload, {
+    axios.post('http://172.31.102.20:9000/api/data/select', payload, {
         headers: {
             'Content-Type': 'application/json',
             'x-api-key': 'ctk0011251' 
         }
     })
         .then((res) =>{
-       // ptName.value.innerHTML = res.data.data[0].hos_guid +'<br>'+ res.data.data[0].fname +' '+ res.data.data[0].lname
-          // console.log(res.data.data[0])
+            ptName.value.innerHTML = res.data.data[0].HR_CID +'<br>'
+           // console.log(res.data.data[0])
         }) 
         .catch(err => console.error(err.response?.data || err.message));
 })

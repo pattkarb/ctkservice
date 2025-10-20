@@ -3,43 +3,43 @@ import { Server } from 'node:http';
 import { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getResponseStatus, getQuery as getQuery$1, readBody, getRouterParam, setHeader, lazyEventHandler, useBase, createApp, createRouter as createRouter$1, toNodeListener, getResponseStatusText } from 'file://D:/project/ctkservice/node_modules/h3/dist/index.mjs';
-import { escapeHtml } from 'file://D:/project/ctkservice/node_modules/@vue/shared/dist/shared.cjs.js';
-import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://D:/project/ctkservice/node_modules/vue-bundle-renderer/dist/runtime.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file://D:/project/ctkservice/node_modules/ufo/dist/index.mjs';
-import destr, { destr as destr$1 } from 'file://D:/project/ctkservice/node_modules/destr/dist/index.mjs';
-import { renderToString } from 'file://D:/project/ctkservice/node_modules/vue/server-renderer/index.mjs';
-import { klona } from 'file://D:/project/ctkservice/node_modules/klona/dist/index.mjs';
-import defu, { defuFn } from 'file://D:/project/ctkservice/node_modules/defu/dist/defu.mjs';
-import { snakeCase } from 'file://D:/project/ctkservice/node_modules/scule/dist/index.mjs';
-import { createHead as createHead$1, propsToString, renderSSRHead } from 'file://D:/project/ctkservice/node_modules/unhead/dist/server.mjs';
-import { stringify, uneval } from 'file://D:/project/ctkservice/node_modules/devalue/index.js';
-import { isVNode, toValue, isRef } from 'file://D:/project/ctkservice/node_modules/vue/index.mjs';
-import { createHooks } from 'file://D:/project/ctkservice/node_modules/hookable/dist/index.mjs';
-import { createFetch, Headers as Headers$1 } from 'file://D:/project/ctkservice/node_modules/ofetch/dist/node.mjs';
-import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file://D:/project/ctkservice/node_modules/node-mock-http/dist/index.mjs';
-import { createStorage, prefixStorage } from 'file://D:/project/ctkservice/node_modules/unstorage/dist/index.mjs';
-import unstorage_47drivers_47fs from 'file://D:/project/ctkservice/node_modules/unstorage/drivers/fs.mjs';
-import { digest, hash as hash$1 } from 'file://D:/project/ctkservice/node_modules/ohash/dist/index.mjs';
-import { toRouteMatcher, createRouter } from 'file://D:/project/ctkservice/node_modules/radix3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getResponseStatus, getQuery as getQuery$1, readBody, getRouterParam, setHeader, lazyEventHandler, useBase, createApp, createRouter as createRouter$1, toNodeListener, getResponseStatusText } from 'file://D:/projects/ctkservice/node_modules/h3/dist/index.mjs';
+import { escapeHtml } from 'file://D:/projects/ctkservice/node_modules/@vue/shared/dist/shared.cjs.js';
+import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://D:/projects/ctkservice/node_modules/vue-bundle-renderer/dist/runtime.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file://D:/projects/ctkservice/node_modules/ufo/dist/index.mjs';
+import destr, { destr as destr$1 } from 'file://D:/projects/ctkservice/node_modules/destr/dist/index.mjs';
+import { renderToString } from 'file://D:/projects/ctkservice/node_modules/vue/server-renderer/index.mjs';
+import { klona } from 'file://D:/projects/ctkservice/node_modules/klona/dist/index.mjs';
+import defu, { defuFn } from 'file://D:/projects/ctkservice/node_modules/defu/dist/defu.mjs';
+import { snakeCase } from 'file://D:/projects/ctkservice/node_modules/scule/dist/index.mjs';
+import { createHead as createHead$1, propsToString, renderSSRHead } from 'file://D:/projects/ctkservice/node_modules/unhead/dist/server.mjs';
+import { stringify, uneval } from 'file://D:/projects/ctkservice/node_modules/devalue/index.js';
+import { isVNode, toValue, isRef } from 'file://D:/projects/ctkservice/node_modules/vue/index.mjs';
+import { createHooks } from 'file://D:/projects/ctkservice/node_modules/hookable/dist/index.mjs';
+import { createFetch, Headers as Headers$1 } from 'file://D:/projects/ctkservice/node_modules/ofetch/dist/node.mjs';
+import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file://D:/projects/ctkservice/node_modules/node-mock-http/dist/index.mjs';
+import { createStorage, prefixStorage } from 'file://D:/projects/ctkservice/node_modules/unstorage/dist/index.mjs';
+import unstorage_47drivers_47fs from 'file://D:/projects/ctkservice/node_modules/unstorage/drivers/fs.mjs';
+import { digest, hash as hash$1 } from 'file://D:/projects/ctkservice/node_modules/ohash/dist/index.mjs';
+import { toRouteMatcher, createRouter } from 'file://D:/projects/ctkservice/node_modules/radix3/dist/index.mjs';
 import { readFile } from 'node:fs/promises';
-import consola, { consola as consola$1 } from 'file://D:/project/ctkservice/node_modules/consola/dist/index.mjs';
-import { ErrorParser } from 'file://D:/project/ctkservice/node_modules/youch-core/build/index.js';
-import { Youch } from 'file://D:/project/ctkservice/node_modules/youch/build/index.js';
-import { SourceMapConsumer } from 'file://D:/project/ctkservice/node_modules/source-map/source-map.js';
+import consola, { consola as consola$1 } from 'file://D:/projects/ctkservice/node_modules/consola/dist/index.mjs';
+import { ErrorParser } from 'file://D:/projects/ctkservice/node_modules/youch-core/build/index.js';
+import { Youch } from 'file://D:/projects/ctkservice/node_modules/youch/build/index.js';
+import { SourceMapConsumer } from 'file://D:/projects/ctkservice/node_modules/source-map/source-map.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { getContext } from 'file://D:/project/ctkservice/node_modules/unctx/dist/index.mjs';
-import { captureRawStackTrace, parseRawStackTrace } from 'file://D:/project/ctkservice/node_modules/errx/dist/index.js';
+import { getContext } from 'file://D:/projects/ctkservice/node_modules/unctx/dist/index.mjs';
+import { captureRawStackTrace, parseRawStackTrace } from 'file://D:/projects/ctkservice/node_modules/errx/dist/index.js';
 import { promises } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname as dirname$1, resolve as resolve$1, basename, isAbsolute } from 'file://D:/project/ctkservice/node_modules/pathe/dist/index.mjs';
-import { getIcons } from 'file://D:/project/ctkservice/node_modules/@iconify/utils/lib/index.js';
-import { collections } from 'file://D:/project/ctkservice/.nuxt/nuxt-icon-server-bundle.mjs';
-import { walkResolver } from 'file://D:/project/ctkservice/node_modules/unhead/dist/utils.mjs';
-import localAdapter from 'file://D:/project/ctkservice/node_modules/db0/dist/connectors/better-sqlite3.mjs';
-import { ipxFSStorage, ipxHttpStorage, createIPX, createIPXH3Handler } from 'file://D:/project/ctkservice/node_modules/ipx/dist/index.mjs';
+import { dirname as dirname$1, resolve as resolve$1, basename, isAbsolute } from 'file://D:/projects/ctkservice/node_modules/pathe/dist/index.mjs';
+import { getIcons } from 'file://D:/projects/ctkservice/node_modules/@iconify/utils/lib/index.js';
+import { collections } from 'file://D:/projects/ctkservice/.nuxt/nuxt-icon-server-bundle.mjs';
+import { walkResolver } from 'file://D:/projects/ctkservice/node_modules/unhead/dist/utils.mjs';
+import localAdapter from 'file://D:/projects/ctkservice/node_modules/db0/dist/connectors/better-sqlite3.mjs';
+import { ipxFSStorage, ipxHttpStorage, createIPX, createIPXH3Handler } from 'file://D:/projects/ctkservice/node_modules/ipx/dist/index.mjs';
 
-const serverAssets = [{"baseName":"server","dir":"D:/project/ctkservice/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"D:/projects/ctkservice/server/assets"}];
 
 const assets$1 = createStorage();
 
@@ -51,11 +51,11 @@ const storage = createStorage({});
 
 storage.mount('/assets', assets$1);
 
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/project/ctkservice","watchOptions":{"ignored":[null]}}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/project/ctkservice/server","watchOptions":{"ignored":[null]}}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:/project/ctkservice/.nuxt"}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:/project/ctkservice/.nuxt/cache"}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"D:/project/ctkservice/.data/kv"}));
+storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/projects/ctkservice","watchOptions":{"ignored":[null]}}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/projects/ctkservice/server","watchOptions":{"ignored":[null]}}));
+storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:/projects/ctkservice/.nuxt"}));
+storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:/projects/ctkservice/.nuxt/cache"}));
+storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"D:/projects/ctkservice/.data/kv"}));
 
 function useStorage(base = "") {
   return base ? prefixStorage(storage, base) : storage;
@@ -928,7 +928,7 @@ const _inlineRuntimeConfig = {
     "clientId1": "66f416cd-3945-4ff2-8ef8-ee7b8219d0d0",
     "clientSecret1": "F1vlLszBVL5gzYI5u6WjlAfrBN1G4Msx",
     "content": {
-      "wsUrl": "ws://localhost:4001/"
+      "wsUrl": "ws://localhost:4000/"
     },
     "mdc": {
       "components": {
@@ -962,7 +962,7 @@ const _inlineRuntimeConfig = {
     },
     "localDatabase": {
       "type": "sqlite",
-      "filename": "D:/project/ctkservice/.data/content/contents.sqlite"
+      "filename": "D:/projects/ctkservice/.data/content/contents.sqlite"
     },
     "integrityCheck": true
   },
@@ -977,7 +977,7 @@ const _inlineRuntimeConfig = {
     "alias": {},
     "fs": {
       "dir": [
-        "D:/project/ctkservice/public"
+        "D:/projects/ctkservice/public"
       ]
     },
     "http": {
@@ -1353,13 +1353,13 @@ if (!window.__NUXT_DEVTOOLS_TIME_METRIC__) {
 window.__NUXT_DEVTOOLS_TIME_METRIC__.appInit = Date.now()
 `;
 
-const _pUIwq5FbnfFD5GhGY26IiK_DUqzL4WHRVqRqLa70878 = (function(nitro) {
+const _Q2Er2oMltdEsRDWjYsHnoIH6O992TjwRindfu9Z4fzc = (function(nitro) {
   nitro.hooks.hook("render:html", (htmlContext) => {
     htmlContext.head.push(`<script>${script$1}<\/script>`);
   });
 });
 
-const rootDir = "D:/project/ctkservice";
+const rootDir = "D:/projects/ctkservice";
 
 const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"},{"name":"description","content":"Ctk@HosPital :-"}],"link":[{"rel":"icon","type":"image/x-icon","href":"/favicon.ico"},{"rel":"stylesheet","href":"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"}],"style":[],"script":[],"noscript":[],"title":"Ctk@HosPital :-"};
 
@@ -1382,7 +1382,7 @@ const devReducers = {
   URL: (data) => data instanceof URL ? data.toString() : void 0
 };
 const asyncContext = getContext("nuxt-dev", { asyncContext: true, AsyncLocalStorage });
-const _f5AU3CcflFzA45M9xSpZmk7gpdYb4s2RyofmctGLgbk = (nitroApp) => {
+const _bD1IwvokQBVqJABW2z7VSla3OMqsuxG3Lmnq9OJbAXg = (nitroApp) => {
   const handler = nitroApp.h3App.handler;
   nitroApp.h3App.handler = (event) => {
     return asyncContext.callAsync({ logs: [], event }, () => handler(event));
@@ -1453,16 +1453,16 @@ function onConsoleLog(callback) {
 
 const script = "\"use strict\";(()=>{const t=window,e=document.documentElement,c=[\"dark\",\"light\"],n=getStorageValue(\"localStorage\",\"nuxt-color-mode\")||\"system\";let i=n===\"system\"?u():n;const r=e.getAttribute(\"data-color-mode-forced\");r&&(i=r),l(i),t[\"__NUXT_COLOR_MODE__\"]={preference:n,value:i,getColorScheme:u,addColorScheme:l,removeColorScheme:d};function l(o){const s=\"\"+o+\"\",a=\"\";e.classList?e.classList.add(s):e.className+=\" \"+s,a&&e.setAttribute(\"data-\"+a,o)}function d(o){const s=\"\"+o+\"\",a=\"\";e.classList?e.classList.remove(s):e.className=e.className.replace(new RegExp(s,\"g\"),\"\"),a&&e.removeAttribute(\"data-\"+a)}function f(o){return t.matchMedia(\"(prefers-color-scheme\"+o+\")\")}function u(){if(t.matchMedia&&f(\"\").media!==\"not all\"){for(const o of c)if(f(\":\"+o).matches)return o}return\"light\"}})();function getStorageValue(t,e){switch(t){case\"localStorage\":return window.localStorage.getItem(e);case\"sessionStorage\":return window.sessionStorage.getItem(e);case\"cookie\":return getCookie(e);default:return null}}function getCookie(t){const c=(\"; \"+window.document.cookie).split(\"; \"+t+\"=\");if(c.length===2)return c.pop()?.split(\";\").shift()}";
 
-const _06torauePxwX4U8RPFH_iuciBizccDjebaMnivIjAw = (function(nitro) {
+const _QcbgFFOiLPJTUpZkbSoB0e0fJUYocoSxrZkSx15enCo = (function(nitro) {
   nitro.hooks.hook("render:html", (htmlContext) => {
     htmlContext.head.push(`<script>${script}<\/script>`);
   });
 });
 
 const plugins = [
-  _pUIwq5FbnfFD5GhGY26IiK_DUqzL4WHRVqRqLa70878,
-_f5AU3CcflFzA45M9xSpZmk7gpdYb4s2RyofmctGLgbk,
-_06torauePxwX4U8RPFH_iuciBizccDjebaMnivIjAw
+  _Q2Er2oMltdEsRDWjYsHnoIH6O992TjwRindfu9Z4fzc,
+_bD1IwvokQBVqJABW2z7VSla3OMqsuxG3Lmnq9OJbAXg,
+_QcbgFFOiLPJTUpZkbSoB0e0fJUYocoSxrZkSx15enCo
 ];
 
 const assets = {};
@@ -1490,7 +1490,7 @@ function getAsset (id) {
 
 const METHODS = /* @__PURE__ */ new Set(["HEAD", "GET"]);
 const EncodingMap = { gzip: ".gz", br: ".br" };
-const _Nuhgph = eventHandler((event) => {
+const _U5rxSa = eventHandler((event) => {
   if (event.method && !METHODS.has(event.method)) {
     return;
   }
@@ -1688,7 +1688,7 @@ async function fetchDatabase(event, collection) {
 
 const warnOnceSet = /* @__PURE__ */ new Set();
 const DEFAULT_ENDPOINT = "https://api.iconify.design";
-const _yOq6RX = defineCachedEventHandler(async (event) => {
+const _a1D2q4 = defineCachedEventHandler(async (event) => {
   const url = getRequestURL(event);
   if (!url)
     return createError({ status: 400, message: "Invalid icon request" });
@@ -1806,8 +1806,8 @@ function setSSRError(ssrContext, error) {
 
 const APP_ROOT_OPEN_TAG = `<${appRootTag}${propsToString(appRootAttrs)}>`;
 const APP_ROOT_CLOSE_TAG = `</${appRootTag}>`;
-const getServerEntry = () => import('file://D:/project/ctkservice/.nuxt//dist/server/server.mjs').then((r) => r.default || r);
-const getClientManifest = () => import('file://D:/project/ctkservice/.nuxt//dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
+const getServerEntry = () => import('file://D:/projects/ctkservice/.nuxt//dist/server/server.mjs').then((r) => r.default || r);
+const getClientManifest = () => import('file://D:/projects/ctkservice/.nuxt//dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
 const getSSRRenderer = lazyCachedFunction(async () => {
   const manifest = await getClientManifest();
   if (!manifest) {
@@ -2058,7 +2058,7 @@ async function getIslandContext(event) {
   return ctx;
 }
 
-const _3zxIHy = eventHandler(async (event) => {
+const _rIvl66 = eventHandler(async (event) => {
   const collection = getRouterParam(event, "collection");
   setHeader(event, "Content-Type", "text/plain");
   const data = await useStorage().getItem(`build:content:database.compressed.mjs`) || "";
@@ -2069,7 +2069,7 @@ const _3zxIHy = eventHandler(async (event) => {
       return content.substring(lineStart.length, content.length - 1);
     }
   }
-  return await import('file://D:/project/ctkservice/.nuxt/content/database.compressed.mjs').then((m) => m[collection]);
+  return await import('file://D:/projects/ctkservice/.nuxt/content/database.compressed.mjs').then((m) => m[collection]);
 });
 
 async function decompressSQLDump(base64Str, compressionType = "gzip") {
@@ -2340,7 +2340,7 @@ function cleanupQuery(query, options = { removeString: false }) {
   return result;
 }
 
-const _hLxxaz = eventHandler(async (event) => {
+const _kfWQ14 = eventHandler(async (event) => {
   const { sql } = await readBody(event);
   const collection = getRouterParam(event, "collection");
   assertSafeQuery(sql, collection);
@@ -2351,7 +2351,7 @@ const _hLxxaz = eventHandler(async (event) => {
   return loadDatabaseAdapter(conf).all(sql);
 });
 
-const _BOCKwi = lazyEventHandler(() => {
+const _7anpzh = lazyEventHandler(() => {
   const opts = useRuntimeConfig().ipx || {};
   const fsDir = opts?.fs?.dir ? (Array.isArray(opts.fs.dir) ? opts.fs.dir : [opts.fs.dir]).map((dir) => isAbsolute(dir) ? dir : fileURLToPath(new URL(dir, globalThis._importMeta_.url))) : void 0;
   const fsStorage = opts.fs?.dir ? ipxFSStorage({ ...opts.fs, dir: fsDir }) : void 0;
@@ -2369,19 +2369,19 @@ const _BOCKwi = lazyEventHandler(() => {
   return useBase(opts.baseURL, ipxHandler);
 });
 
-const _lazy_hlbqO2 = () => Promise.resolve().then(function () { return renderer$1; });
+const _lazy_TpOnbz = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
-  { route: '', handler: _Nuhgph, lazy: false, middleware: true, method: undefined },
-  { route: '/__nuxt_error', handler: _lazy_hlbqO2, lazy: true, middleware: false, method: undefined },
-  { route: '/api/_nuxt_icon/:collection', handler: _yOq6RX, lazy: false, middleware: false, method: undefined },
+  { route: '', handler: _U5rxSa, lazy: false, middleware: true, method: undefined },
+  { route: '/__nuxt_error', handler: _lazy_TpOnbz, lazy: true, middleware: false, method: undefined },
+  { route: '/api/_nuxt_icon/:collection', handler: _a1D2q4, lazy: false, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: _SxA8c9, lazy: false, middleware: false, method: undefined },
-  { route: '/__nuxt_content/:collection/sql_dump.txt', handler: _3zxIHy, lazy: false, middleware: false, method: undefined },
-  { route: '/__nuxt_content/:collection/query', handler: _hLxxaz, lazy: false, middleware: false, method: undefined },
-  { route: '/_ipx/**', handler: _BOCKwi, lazy: false, middleware: false, method: undefined },
-  { route: '/_fonts/**', handler: _lazy_hlbqO2, lazy: true, middleware: false, method: undefined },
-  { route: '/_scripts/**', handler: _lazy_hlbqO2, lazy: true, middleware: false, method: undefined },
-  { route: '/**', handler: _lazy_hlbqO2, lazy: true, middleware: false, method: undefined }
+  { route: '/__nuxt_content/:collection/sql_dump.txt', handler: _rIvl66, lazy: false, middleware: false, method: undefined },
+  { route: '/__nuxt_content/:collection/query', handler: _kfWQ14, lazy: false, middleware: false, method: undefined },
+  { route: '/_ipx/**', handler: _7anpzh, lazy: false, middleware: false, method: undefined },
+  { route: '/_fonts/**', handler: _lazy_TpOnbz, lazy: true, middleware: false, method: undefined },
+  { route: '/_scripts/**', handler: _lazy_TpOnbz, lazy: true, middleware: false, method: undefined },
+  { route: '/**', handler: _lazy_TpOnbz, lazy: true, middleware: false, method: undefined }
 ];
 
 function createNitroApp() {

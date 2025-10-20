@@ -210,6 +210,7 @@ declare global {
   const useToast: typeof import('../../node_modules/@nuxt/ui/dist/runtime/composables/useToast')['useToast']
   const useTransitionState: typeof import('vue')['useTransitionState']
   const useUserStore: typeof import('../../stores/user')['useUserStore']
+  const userManage: typeof import('../../composables/useOffice')['userManage']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -440,6 +441,7 @@ declare module 'vue' {
     readonly useToast: UnwrapRef<typeof import('../../node_modules/@nuxt/ui/dist/runtime/composables/useToast')['useToast']>
     readonly useTransitionState: UnwrapRef<typeof import('vue')['useTransitionState']>
     readonly useUserStore: UnwrapRef<typeof import('../../stores/user')['useUserStore']>
+    readonly userManage: UnwrapRef<typeof import('../../composables/useOffice')['userManage']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

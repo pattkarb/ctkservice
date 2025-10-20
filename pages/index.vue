@@ -25,6 +25,7 @@
     import { ref, onMounted } from 'vue';
     import { useUserStore } from '~/stores/user'
     const userStore = useUserStore();
+    const config = useRuntimeConfig()
 
     useHead({
         title: `MainPage`,

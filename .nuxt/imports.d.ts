@@ -43,6 +43,7 @@ export { portalTargetInjectionKey, usePortal } from '../node_modules/@nuxt/ui/di
 export { useResizable } from '../node_modules/@nuxt/ui/dist/runtime/composables/useResizable';
 export { useScrollspy } from '../node_modules/@nuxt/ui/dist/runtime/composables/useScrollspy';
 export { useToast } from '../node_modules/@nuxt/ui/dist/runtime/composables/useToast';
+export { useUserStore } from '../stores/user';
 export { queryCollection, queryCollectionSearchSections, queryCollectionNavigation, queryCollectionItemSurroundings } from '../node_modules/@nuxt/content/dist/runtime/app';
 export { flatUnwrap as unwrapSlot } from '../node_modules/@nuxtjs/mdc/dist/runtime/utils/node';
 export { parseMarkdown } from '../node_modules/@nuxtjs/mdc/dist/runtime/parser';
@@ -79,4 +80,5 @@ export { useScriptGoogleTagManager } from '../node_modules/@nuxt/scripts/dist/ru
 export { useScriptGoogleAnalytics } from '../node_modules/@nuxt/scripts/dist/runtime/registry/google-analytics';
 export { useScriptUmamiAnalytics } from '../node_modules/@nuxt/scripts/dist/runtime/registry/umami-analytics';
 export { useColorMode } from '../node_modules/@nuxtjs/color-mode/dist/runtime/composables';
+export { defineStore, acceptHMRUpdate, usePinia, storeToRefs } from '../node_modules/@pinia/nuxt/dist/runtime/composables';
 export { useNuxtDevTools } from '../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';

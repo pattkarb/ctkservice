@@ -5,6 +5,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import axios from 'axios';
+import { p } from '#build/ui/prose';
+
 const config = useRuntimeConfig()
 useHead({
     title: `Detail สินค้า`,
@@ -16,32 +19,23 @@ useHead({
 const ptName = ref(null)
 
 onMounted(async () => {
-    const data = {
-        mysqlID: "db1",
-        queryText: "SELECT hr_cid, hr_fname, hr_lname FROM hr_person LIMIT 5"
-    }
+    const payload = {
+        mysqlID: 'hosoffice',
+        queryText: 'SELECT * FROM hr_person LIMIT 1',
+        
+    };
 
-    try {
-        const response = await fetch('http://61.19.112.116:9000/api/data/person', {
-            method: 'POST',
-            headers: {
-                'access-control-allow-origin': '*',
-                'x-api-key': 'ctk0011251',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        console.log(response)
-        const result = await response.json()
-        if (ptName.value) {
-            ptName.value.innerText = JSON.stringify(result)
+    axios.post('http://61.19.112.116:9000/api/data/select', payload, {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': 'ctk0011251' 
         }
-    } catch (error) {
-        if (ptName.value) {
-            ptName.value.innerText = 'เกิดข้อผิดพลาด: ' + error
-        }
-        console.log(error)
-    }
+    })
+        .then((res) =>{
+       // ptName.value.innerHTML = res.data.data[0].hos_guid +'<br>'+ res.data.data[0].fname +' '+ res.data.data[0].lname
+          // console.log(res.data.data[0])
+        }) 
+        .catch(err => console.error(err.response?.data || err.message));
 })
 </script>
 

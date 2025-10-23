@@ -1,41 +1,39 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
-  app:{
-    head: {
-      title: 'Ctk@HosPital :-',
-      meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { charset: 'utf-8' },
-        { name: 'description', content: 'Ctk@HosPital :-' }
-      ],
-      link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'}
-      ],
-
-    }
+  ssr: false,
+  typescript: {
+    shim: false,
   },
-  css:[
-    '~/assets/css/main.css',
+  css: [
+    'sweetalert2/dist/sweetalert2.min.css', 
+    // ... ไฟล์ CSS อื่นๆ ของคุณ
   ],
-  runtimeConfig: {
-    public: {
-      apiUrl: process.env.API_URL || '',
-      clientId: process.env.CLIENT_ID || '',
-      clientSecret: process.env.CLIENT_SECRET || '',
-      clientId1: process.env.CLIENT_ID1 || '',
-      clientSecret1: process.env.CLIENT_SECRET1 || ''
-    }
+  app: {
+    head: {
+      title:
+        "CtK@HospitaL",
+    },
   },
-  modules: [
-    '@nuxt/content',
-    '@nuxt/eslint',
-    '@nuxt/image',
-    '@nuxt/scripts',
-    '@nuxt/test-utils',
-    '@nuxt/ui',
-    '@pinia/nuxt'
-  ]
-})
+  runtimeConfig:{
+    public:{
+      ClientId: process.env.CLIENT_ID,
+      SecretId: process.env.CLIENT_SECRET,
+      ClientId1: process.env.CLIENT_ID1,
+      SecretId1: process.env.CLIENT_SECRET1,
+      ApiUrl: process.env.API_URL,
+
+    }  
+  },
+  modules:[
+    '@pinia/nuxt',
+  ],
+  build: {
+    transpile: ["vuetify"],
+  },
+  nitro: {
+    serveStatic: true,
+  },
+  sourcemap: { server: false, client: false },
+  devServerHandlers: [],
+  compatibilityDate: "2025-04-04",
+
+});

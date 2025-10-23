@@ -1,44 +1,39 @@
-import { defineStore } from 'pinia'
-
+// stores/user.js
+import { defineStore } from 'pinia';
 export const useUserStore = defineStore('user', {
+
   state: () => ({
+    profile: null,
     isLoggedIn: false,
-    username: 'Guest',
-    fullname: '',          
-    moph_access_token: '', 
-    hospital_code: '',     
-    hash_cid: '',          
-    counter: 0
   }),
 
-  
   getters: {
-    authStatus: (state) => state.isLoggedIn ? 'Authenticated' : 'Unauthenticated',
-    doubleCounter: (state) => state.counter * 2
+    username: (state) => state.profile ? state.profile.name : 'Guest',
+    isAdmin: (state) => state.profile ? state.profile.role === 'admin' : false,
   },
 
   actions: {
-      login(userData) {
-      this.isLoggedIn = true;  
-      this.username = userData.username || 'User'; 
-      this.fullname = userData.fullname || '';
-      this.moph_access_token = userData.moph_access_token || '';
-      this.hospital_code = userData.hospital_code || '';
-      this.hash_cid = userData.hash_cid || '';
+    /**
+     * สำหรับเข้าสู่ระบบ (สมมติว่ารับข้อมูลมาแล้ว)
+     * @param {object} userData - ข้อมูลผู้ใช้ที่ได้รับจาก API
+     */
+    login(userData) {
+      this.profile = userData;
+      this.isLoggedIn = true;
     },
 
     logout() {
+      this.profile = null;
       this.isLoggedIn = false;
-      this.username = 'Guest';
-      this.fullname = '';
-      this.moph_access_token = '';
-      this.hospital_code = '';
-      this.hash_cid = '';
-      this.counter = 0;
     },
 
-    increment() {
-      this.counter++;
+    async fetchUserProfile() {
+      // สมมติว่านี่คือการเรียก API
+      const data = await new Promise(resolve => setTimeout(() => {
+          resolve({ id: 101, name: 'Alice', email: 'alice@example.com', role: 'user' });
+      }, 500));
+      
+      this.login(data); // เรียก Action 'login' เพื่ออัปเดต State
     }
-  }
-})
+  },
+});

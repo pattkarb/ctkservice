@@ -17,6 +17,7 @@ interface _GlobalComponents {
     'LayoutFullLogoDarkRtl': typeof import("../components/Layout/Full/logo/LogoDarkRtl.vue")['default']
     'LayoutFullLogoLight': typeof import("../components/Layout/Full/logo/LogoLight.vue")['default']
     'LayoutFullLogoLightRtl': typeof import("../components/Layout/Full/logo/LogoLightRtl.vue")['default']
+    'LayoutFullLogoMain': typeof import("../components/Layout/Full/logo/LogoMain.vue")['default']
     'LayoutFullVerticalHeaderNotificationDD': typeof import("../components/Layout/Full/vertical-header/NotificationDD.vue")['default']
     'LayoutFullVerticalHeaderProfileDD': typeof import("../components/Layout/Full/vertical-header/ProfileDD.vue")['default']
     'LayoutFullVerticalSidebarDropdown': typeof import("../components/Layout/Full/vertical-sidebar/Dropdown/index.vue")['default']
@@ -83,6 +84,7 @@ interface _GlobalComponents {
     'LazyLayoutFullLogoDarkRtl': LazyComponent<typeof import("../components/Layout/Full/logo/LogoDarkRtl.vue")['default']>
     'LazyLayoutFullLogoLight': LazyComponent<typeof import("../components/Layout/Full/logo/LogoLight.vue")['default']>
     'LazyLayoutFullLogoLightRtl': LazyComponent<typeof import("../components/Layout/Full/logo/LogoLightRtl.vue")['default']>
+    'LazyLayoutFullLogoMain': LazyComponent<typeof import("../components/Layout/Full/logo/LogoMain.vue")['default']>
     'LazyLayoutFullVerticalHeaderNotificationDD': LazyComponent<typeof import("../components/Layout/Full/vertical-header/NotificationDD.vue")['default']>
     'LazyLayoutFullVerticalHeaderProfileDD': LazyComponent<typeof import("../components/Layout/Full/vertical-header/ProfileDD.vue")['default']>
     'LazyLayoutFullVerticalSidebarDropdown': LazyComponent<typeof import("../components/Layout/Full/vertical-sidebar/Dropdown/index.vue")['default']>
@@ -155,6 +157,7 @@ export const LayoutFullLogoDark: typeof import("../components/Layout/Full/logo/L
 export const LayoutFullLogoDarkRtl: typeof import("../components/Layout/Full/logo/LogoDarkRtl.vue")['default']
 export const LayoutFullLogoLight: typeof import("../components/Layout/Full/logo/LogoLight.vue")['default']
 export const LayoutFullLogoLightRtl: typeof import("../components/Layout/Full/logo/LogoLightRtl.vue")['default']
+export const LayoutFullLogoMain: typeof import("../components/Layout/Full/logo/LogoMain.vue")['default']
 export const LayoutFullVerticalHeaderNotificationDD: typeof import("../components/Layout/Full/vertical-header/NotificationDD.vue")['default']
 export const LayoutFullVerticalHeaderProfileDD: typeof import("../components/Layout/Full/vertical-header/ProfileDD.vue")['default']
 export const LayoutFullVerticalSidebarDropdown: typeof import("../components/Layout/Full/vertical-sidebar/Dropdown/index.vue")['default']
@@ -221,6 +224,7 @@ export const LazyLayoutFullLogoDark: LazyComponent<typeof import("../components/
 export const LazyLayoutFullLogoDarkRtl: LazyComponent<typeof import("../components/Layout/Full/logo/LogoDarkRtl.vue")['default']>
 export const LazyLayoutFullLogoLight: LazyComponent<typeof import("../components/Layout/Full/logo/LogoLight.vue")['default']>
 export const LazyLayoutFullLogoLightRtl: LazyComponent<typeof import("../components/Layout/Full/logo/LogoLightRtl.vue")['default']>
+export const LazyLayoutFullLogoMain: LazyComponent<typeof import("../components/Layout/Full/logo/LogoMain.vue")['default']>
 export const LazyLayoutFullVerticalHeaderNotificationDD: LazyComponent<typeof import("../components/Layout/Full/vertical-header/NotificationDD.vue")['default']>
 export const LazyLayoutFullVerticalHeaderProfileDD: LazyComponent<typeof import("../components/Layout/Full/vertical-header/ProfileDD.vue")['default']>
 export const LazyLayoutFullVerticalSidebarDropdown: LazyComponent<typeof import("../components/Layout/Full/vertical-sidebar/Dropdown/index.vue")['default']>

@@ -1,5 +1,20 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { UserIcon, MailIcon, ListCheckIcon } from 'vue-tabler-icons';
+import Swal from 'sweetalert2'
+
+function handleLogout() {
+  localStorage.clear();
+  Swal.fire({
+    icon: 'success',
+    title: 'ออกจากระบบ..!',
+    showConfirmButton: false, 
+    timer: 2500,
+  }).then(() => {
+    window.location.href = '/'; 
+  });
+}
+
 </script>
 
 <template>
@@ -16,7 +31,7 @@ import { UserIcon, MailIcon, ListCheckIcon } from 'vue-tabler-icons';
         </template>
         <v-sheet rounded="xl" width="200" elevation="10" class="mt-2">
             <v-list class="py-0" lines="one" density="compact">
-                <v-list-item value="item1" color="primary" >
+                <v-list-item value="item1" color="primary" to="/User/Profile">
                     <template v-slot:prepend>
                         <UserIcon stroke-width="1.5" size="20"/>
                     </template>
@@ -36,7 +51,7 @@ import { UserIcon, MailIcon, ListCheckIcon } from 'vue-tabler-icons';
                 </v-list-item>
             </v-list>
             <div class="pt-4 pb-4 px-5 text-center">
-                <v-btn to="/auth/login" color="primary" variant="outlined" class="rounded-pill" block>Logout</v-btn>
+                <v-btn @click="handleLogout" color="primary" variant="outlined" class="rounded-pill" block>Logout</v-btn>
             </div>
         </v-sheet>
     </v-menu>

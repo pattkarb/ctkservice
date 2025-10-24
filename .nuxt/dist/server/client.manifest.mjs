@@ -7,12 +7,12 @@ export default {
     "module": true,
     "resourceType": "script"
   },
-  "D:/projects/templete/node_modules/nuxt/dist/app/entry.js": {
+  "D:/project/ctkservice/node_modules/nuxt/dist/app/entry.js": {
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
     "isEntry": true,
-    "file": "D:/projects/templete/node_modules/nuxt/dist/app/entry.js"
+    "file": "D:/project/ctkservice/node_modules/nuxt/dist/app/entry.js"
   }
 }

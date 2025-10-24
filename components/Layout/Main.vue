@@ -3,14 +3,13 @@ import { ref, shallowRef, onMounted } from "vue";
 import sidebarItems from "@/components/Layout/Full/vertical-sidebar/sidebarItem";
 import { Menu2Icon, BellRingingIcon } from "vue-tabler-icons";
 import { useAuthStatus } from '~/composables/useAuthStatus';
+import { useUserStore } from '~/stores/user';
 import Swal from 'sweetalert2'
 
 const sidebarMenu = shallowRef(sidebarItems);
 const sDrawer = ref(false);
-import logo from "/images/logos/hospital.png";
-import { useUserStore } from '~/stores/user';
-const userStore = useUserStore();
 
+const userStore = useUserStore();
 const { isLoggedIn, checkAuthStatus } = useAuthStatus();
 
 function LoadUserProfile() {
@@ -40,9 +39,6 @@ function handleLogin() {
     <div class="pa-5 pl-4">
       <LayoutFullLogoDark />
     </div>
-    <!-- ---------------------------------------------- -->
-    <!---Navigation -->
-    <!-- ---------------------------------------------- -->
     <perfect-scrollbar class="scrollnavbar bg-containerBg overflow-y-hidden">
       <v-list class="py-4 px-4 bg-containerBg">
         <!---Menu Loop -->
@@ -81,11 +77,11 @@ function handleLogin() {
       <v-app-bar elevation="0" height="50" class="top-header">
         <div class="d-flex align-center justify-space-between w-100">
           <div class="d-flex align-center">
-            <img :src="logo" width="34" class="p-0 m-0" />
             <v-btn class="hidden-lg-and-up text-muted" @click="sDrawer = !sDrawer" icon variant="flat" size="small"
-              style="margin-left: -5px;">
+              style="padding: 0; margin:0;">
               <Menu2Icon size="20" stroke-width="1.5" />
             </v-btn>
+            <LayoutFullLogoMain />
           </div>
           <div>
             <LayoutFullVerticalHeaderNotificationDD v-if="isLoggedIn" />

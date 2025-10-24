@@ -13,8 +13,6 @@ const {
   showError 
 } = useLoadingSwal();
 
-// import { useRoute } from 'vue-router';
-
 let client_id1 = config.public.ClientId;
 let client_sec1 = config.public.SecretId;
 

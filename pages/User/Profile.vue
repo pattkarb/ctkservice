@@ -4,6 +4,7 @@
     </div>
     <v-card v-else-if="profile" class="mx-auto" max-width="800">
       <h2>{{ profile.email }}</h2>
+      <h2>{{ profile.name_th }}</h2>
     </v-card>
 
 
@@ -11,17 +12,18 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from "vue";
+  import { ref, onMounted, reactive } from "vue";
   import Swal from 'sweetalert2';
   import { useAuthStatus } from '~/composables/useAuthStatus';
   import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
 
   const { isLoggedIn, checkAuthStatus } = useAuthStatus();
+  const { decode } = useJwtDecoder();
 
   const mophProfile = ref<any>(null);
   const profile = ref<any>(null);
   const isLoading = ref(true);
-
+    
   const showLoadingSwal = () => {
     Swal.fire({
         title: 'กำลังโหลดโปรไฟล์...',
@@ -46,17 +48,12 @@
     }
   }, { immediate: true }); 
 
-
 const fetchProfile = async () => {
-  const { decode } = useJwtDecoder();
-
-  isLoading.value = true;
-
+ isLoading.value = true;
   if (!isLoggedIn) {
     navigateTo("/login");
     return;
   }
-
   const profileString = localStorage.getItem("provider_profile");
     try {
         profile.value = profileString ? JSON.parse(profileString) : null;
@@ -66,18 +63,19 @@ const fetchProfile = async () => {
 
   const access_token = localStorage.getItem("moph_access_token") || null;
     if (access_token) {
-        mophProfile.value = useJwtDecoder(access_token).value;
-        console.log('Decoded MOPH Profile:', mophProfile.value);
+        const decodeResult = decode(access_token);
+        if (decodeResult.status === 'success') {
+            mophProfile.value = decodeResult.payload;
+        } else {
+            console.error('MOPH Token decode failed:', decodeResult.error);
+        }
+        //console.log('Decoded MOPH Profile:', mophProfile.value);
     }
   
-  console.log('provider =', profile.value)
+  
   isLoading.value = false;
-};
 
-// 2. Lifecycle Hook สำหรับการดึงข้อมูล
-// ใช้ useAsyncData หรือ onMounted ขึ้นอยู่กับว่าต้องการให้ข้อมูลถูกดึงฝั่ง Server หรือ Client
-// ในที่นี้เลือก onMounted เพื่อให้แน่ใจว่า auth state ถูก init แล้ว
-onMounted(fetchProfile);
+};
 
 // 3. ฟังก์ชันสำหรับแก้ไขโปรไฟล์ (ตัวอย่าง)
 const editProfile = () => {
@@ -90,6 +88,11 @@ useHead({
   title: "โปรไฟล์ผู้ใช้งาน | Ctkservice",
   meta: [{ name: "description", content: "แสดงข้อมูลโปรไฟล์ของผู้ใช้งานระบบ" }],
 });
+
+onMounted(()=>{
+  fetchProfile();
+});
+
 </script>
 
 <style scoped>

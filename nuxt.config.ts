@@ -20,6 +20,7 @@ export default defineNuxtConfig({
       ClientId1: process.env.CLIENT_ID1,
       SecretId1: process.env.CLIENT_SECRET1,
       ApiUrl: process.env.API_URL,
+      ApiKey: process.env.API_KEY,
 
     }  
   },

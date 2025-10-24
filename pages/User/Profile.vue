@@ -1,138 +1,77 @@
 <template>
   <v-container class="py-8">
     <div v-if="isLoading" class="text-center">
-      <v-progress-circular indeterminate color="primary"></v-progress-circular>
-      <p class="mt-4">กำลังดึงข้อมูลโปรไฟล์...</p>
     </div>
-
     <v-card v-else-if="profile" class="mx-auto" max-width="800">
-      <v-img
-        class="align-end text-white"
-        height="150"
-        src="https://picsum.photos/800/150"
-        cover
-      >
-        <v-card-title class="pb-1">ข้อมูลผู้ใช้งาน</v-card-title>
-      </v-img>
-
-      <div
-        class="d-flex justify-center"
-        style="margin-top: -60px; margin-bottom: 20px"
-      >
-        <v-avatar size="100" class="elevation-5">
-          <v-img
-            :src="profile.photo_url || 'https://via.placeholder.com/100'"
-            alt="User Photo"
-          ></v-img>
-        </v-avatar>
-      </div>
-
-      <v-card-text>
-        <h2 class="text-h5 text-center mb-4">{{ profile.full_name }}</h2>
-
-        <v-divider class="my-4"></v-divider>
-
-        <v-list density="compact">
-          <v-list-item>
-            <v-list-item-icon><v-icon>mdi-account</v-icon></v-list-item-icon>
-            <v-list-item-title>ชื่อ-นามสกุล:</v-list-item-title>
-            <v-list-item-subtitle>{{ profile.full_name }}</v-list-item-subtitle>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-icon
-              ><v-icon>mdi-badge-account</v-icon></v-list-item-icon
-            >
-            <v-list-item-title>ตำแหน่ง:</v-list-item-title>
-            <v-list-item-subtitle>{{
-              profile.position || "ไม่ระบุ"
-            }}</v-list-item-subtitle>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-icon
-              ><v-icon>mdi-hospital-box</v-icon></v-list-item-icon
-            >
-            <v-list-item-title>หน่วยงาน/สถานพยาบาล:</v-list-item-title>
-            <v-list-item-subtitle>{{
-              profile.organization
-            }}</v-list-item-subtitle>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-icon
-              ><v-icon>mdi-card-account-details</v-icon></v-list-item-icon
-            >
-            <v-list-item-title>เลข 13 หลัก (CID):</v-list-item-title>
-            <v-list-item-subtitle>{{
-              profile.cid || "ไม่มีข้อมูล"
-            }}</v-list-item-subtitle>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-icon><v-icon>mdi-email</v-icon></v-list-item-icon>
-            <v-list-item-title>อีเมล:</v-list-item-title>
-            <v-list-item-subtitle>{{
-              profile.email || "ไม่มีข้อมูล"
-            }}</v-list-item-subtitle>
-          </v-list-item>
-        </v-list>
-      </v-card-text>
-
-      <v-card-actions class="justify-center">
-        <v-btn color="secondary" prepend-icon="mdi-pencil" @click="editProfile"
-          >แก้ไขโปรไฟล์</v-btn
-        >
-        <v-btn color="error" prepend-icon="mdi-logout" @click="auth.logout()"
-          >ออกจากระบบ</v-btn
-        >
-      </v-card-actions>
+      <h2>{{ profile.email }}</h2>
     </v-card>
 
-    <v-alert v-else type="error" border="start" variant="tonal" class="mt-6">
-      ไม่สามารถโหลดข้อมูลโปรไฟล์ได้ กรุณาลองใหม่อีกครั้ง
-    </v-alert>
+
   </v-container>
 </template>
 
 <script setup lang="ts">
+  import { ref, onMounted } from "vue";
+  import Swal from 'sweetalert2';
+  import { useAuthStatus } from '~/composables/useAuthStatus';
+  import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
 
-import { ref } from "vue";
+  const { isLoggedIn, checkAuthStatus } = useAuthStatus();
 
-const auth = useAuth();
+  const mophProfile = ref<any>(null);
+  const profile = ref<any>(null);
+  const isLoading = ref(true);
 
-// State สำหรับเก็บข้อมูลโปรไฟล์และสถานะการโหลด
-const profile = ref<any>(null);
-const isLoading = ref(true);
+  const showLoadingSwal = () => {
+    Swal.fire({
+        title: 'กำลังโหลดโปรไฟล์...',
+        html: 'กรุณารอสักครู่ขณะที่ระบบกำลังดึงข้อมูลผู้ใช้ !!',
+        allowOutsideClick: false, // ห้ามผู้ใช้ปิด Modal เอง
+        showConfirmButton: false, // ไม่แสดงปุ่ม
+        didOpen: () => {
+            Swal.showLoading(); // แสดง Spinner
+        }
+      });
+  };
 
-// 1. ดึงข้อมูลโปรไฟล์เมื่อโหลดหน้า
+  const closeLoadingSwal = () => {
+    Swal.close();
+  };
+
+  watch(isLoading, (newValue) => {
+    if (newValue === true) {
+        showLoadingSwal();
+    } else {
+        closeLoadingSwal();
+    }
+  }, { immediate: true }); 
+
+
 const fetchProfile = async () => {
-  // ต้องมี token เพื่อเรียก API
-  if (!auth.isLoggedIn.value) {
-    // หากไม่มี token อาจต้อง redirect ไปหน้า login
+  const { decode } = useJwtDecoder();
+
+  isLoading.value = true;
+
+  if (!isLoggedIn) {
     navigateTo("/login");
     return;
   }
 
-  // เรียก Nuxt Server API (Backend) ที่จะทำการส่ง Token ไปดึงข้อมูลผู้ใช้จาก MOPH ID หรือ Database
-  try {
-    const { data } = await useFetch("/api/user/profile", {
-      method: "GET",
-      // headers: { Authorization: `Bearer ${auth.token.value}` } // อาจจะใส่ใน Server API Middleware แทน
-    });
-
-    if (data.value) {
-      profile.value = data.value;
-    } else {
-      // กรณี API ไม่พบข้อมูลผู้ใช้
-      throw new Error("User profile data not found.");
+  const profileString = localStorage.getItem("provider_profile");
+    try {
+        profile.value = profileString ? JSON.parse(profileString) : null;
+    } catch (e) {
+        console.error("Error parsing provider_profile:", e);
     }
-  } catch (e) {
-    console.error("Error fetching user profile:", e);
-    profile.value = null;
-  } finally {
-    isLoading.value = false;
-  }
+
+  const access_token = localStorage.getItem("moph_access_token") || null;
+    if (access_token) {
+        mophProfile.value = useJwtDecoder(access_token).value;
+        console.log('Decoded MOPH Profile:', mophProfile.value);
+    }
+  
+  console.log('provider =', profile.value)
+  isLoading.value = false;
 };
 
 // 2. Lifecycle Hook สำหรับการดึงข้อมูล

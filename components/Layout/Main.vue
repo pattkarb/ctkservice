@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 import { ref, shallowRef, onMounted } from "vue";
 import sidebarItems from "@/components/Layout/Full/vertical-sidebar/sidebarItem";
 import { Menu2Icon, BellRingingIcon } from "vue-tabler-icons";
@@ -30,7 +31,7 @@ function handleLogout() {
 
 function handleLogin() {
   window.location.href = '/auth/login';
- }
+}
 
 </script>
 

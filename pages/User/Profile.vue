@@ -9,6 +9,9 @@
 
 
   </v-container>
+  <v-container>
+    <pre v-if="data">{{ JSON.stringify(data, null, 2) }}</pre>
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -16,6 +19,7 @@
   import Swal from 'sweetalert2';
   import { useAuthStatus } from '~/composables/useAuthStatus';
   import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
+  import { useActionApi } from '~/composables/useApi';
 
   const { isLoggedIn, checkAuthStatus } = useAuthStatus();
   const { decode } = useJwtDecoder();
@@ -36,6 +40,14 @@
       });
   };
 
+  const API_BASE_URL = 'http://61.19.112.116:9000/api/data';
+  const { 
+      data, 
+      loading, 
+      error, 
+      selectData
+  } = useActionApi(API_BASE_URL);
+
   const closeLoadingSwal = () => {
     Swal.close();
   };
@@ -47,6 +59,20 @@
         closeLoadingSwal();
     }
   }, { immediate: true }); 
+
+const fetchOffice = async () => {
+    const apiPayload = {
+        "mysqlID": "hosoffice",
+        "queryText": "SELECT *  FROM hr_person LIMIT 1"
+    };
+    try {
+        const result = await selectData(apiPayload); 
+        console.log('ข้อมูลที่ดึงมา:', result);
+    } catch (e) {
+        console.error("API Call failed:", e);
+    }
+};
+
 
 const fetchProfile = async () => {
  isLoading.value = true;
@@ -91,6 +117,7 @@ useHead({
 
 onMounted(()=>{
   fetchProfile();
+  fetchOffice();
 });
 
 </script>

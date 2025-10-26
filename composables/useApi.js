@@ -1,54 +1,107 @@
-// composables/useApi.js
+import { ref } from 'vue';
+import Swal from 'sweetalert2'; 
 
 /**
- * Composable สำหรับจัดการ CRUD Operations ผ่าน API
- * @param {string} url - URL ของ API ที่ต้องการเรียก (e.g., '/api/data')
- * @param {'get' | 'post' | 'put' | 'delete'} method - HTTP Method
- * @param {object} [body=null] - JSON body สำหรับ POST/PUT (e.g., { mysqlID: 'hosxp', queryText: '...' })
- * @param {object} [query=null] - Query parameters สำหรับ GET/DELETE
- * @returns {Promise<object>} - ข้อมูลที่ได้จาก API หรือ throw error
+ * ฟังก์ชันสำหรับแสดง Toast Notification
+ * @param {'success'|'error'} icon 
+ * @param {string} title 
  */
-export const callApi = async (
-    url: string,
-    method: 'get' | 'post' | 'put' | 'delete',
-    body: object | null = null,
-    query: object | null = null,
-    apiKey: string | null = null 
-) => {
-    
-    const config = useRuntimeConfig();
-    const apiKey = config.public.ApiKey || 'ctk001251'; // ใช้ค่าเริ่มต้นถ้าไม่มี config
+const showToast = (icon, title) => {
+    Swal.fire({
+        icon: icon,
+        title: title,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        // customClass: { container: 'swal2-toast-container' }
+    });
+};
 
-    const headers = {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey || useRuntimeConfig().public.ApiKey || '',
-        // สามารถเพิ่ม Header สำหรับ Authorization (เช่น JWT) ได้ที่นี่:
-        // 'Authorization': `Bearer ${useAuth().token.value}` 
+export function useActionApi(baseUrl) {
+    
+    const data = ref(null);
+    const loading = ref(false);
+    const error = ref(null);
+
+    // Endpoint Suffixes (ตามลักษณะ API ของคุณ)
+    const ENDPOINTS = {
+        SELECT: '/select',
+        INSERT: '/insert',
+        UPDATE: '/update',
+        DELETE: '/delete',
     };
 
-    try {
-        const response = await $fetch(url, {
-            method: method.toUpperCase(), 
-            headers: headers,
-            body: body,      
-            query: query,    
-            requestType: 'json', 
-            responseType: 'json',
+    const resetStatus = () => {
+        loading.value = true;
+        error.value = null;
+    };
+
+    const executeApiCall = async (endpointSuffix, method, payload) => {
+        resetStatus();
+        
+        const loadingSwal = Swal.fire({
+            title: 'กำลังประมวลผล...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => Swal.showLoading(),
+            toast: true,
+            position: 'top-end'
         });
 
-        return response;
+        const config = useRuntimeConfig();
+        const apiKey = config.public.ApiKey || 'ctk0011251';
+        const url = `${baseUrl}${endpointSuffix}`;
+        let successMessage = `ดำเนินการ ${method} สำเร็จ!`;
 
-    } catch (error: any) {
-        // จัดการข้อผิดพลาดและโยน error ออกไป
-        const status = error.response?.status || 500;
-        const message = error.data?.message || `API Call failed with status ${status}`;
-        
-        console.error(`Error during ${method.toUpperCase()} to ${url}:`, error);
-        
-        throw createError({
-            statusCode: status,
-            statusMessage: message,
-            fatal: false, // ไม่ให้หยุดแอปพลิเคชัน
-        });
-    }
-};
+        try {
+            const response = await $fetch(url, {
+                method: method,
+                body: payload,
+                headers: { 'x-api-key': apiKey },
+            });
+            
+            data.value = response;
+            loadingSwal.close();
+            showToast('success', successMessage);
+            
+            return response;
+
+        } catch (err) {
+            loadingSwal.close();
+            const msg = err?.data?.message || err?.message || 'Unknown API Error';
+            error.value = `[${method}] Error at ${endpointSuffix}: ${msg}`;
+            showToast('error', `เกิดข้อผิดพลาด: ${msg.substring(0, 50)}...`);
+            throw new Error(error.value);
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    const selectData = (payload) => {
+        return executeApiCall(ENDPOINTS.SELECT, 'POST', payload);
+    };
+
+    const insertItem = (payload) => {
+        return executeApiCall(ENDPOINTS.INSERT, 'POST', payload); 
+    };
+    
+    const updateItem = (payload) => {
+        return executeApiCall(ENDPOINTS.UPDATE, 'POST', payload); 
+    };
+
+    const deleteItem = (payload) => {
+        return executeApiCall(ENDPOINTS.DELETE, 'POST', payload); 
+    };
+    
+    return {
+        data,
+        loading,
+        error,
+        selectData,
+        insertItem,
+        updateItem,
+        deleteItem,
+    };
+}

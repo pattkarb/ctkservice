@@ -2,19 +2,53 @@
 
 import { ref, shallowRef, onMounted } from "vue";
 import sidebarItems from "@/components/Layout/Full/vertical-sidebar/sidebarItem";
-import { Menu2Icon, BellRingingIcon } from "vue-tabler-icons";
+import { Menu2Icon, BellRingingIcon, JsonIcon } from "vue-tabler-icons";
 import { useAuthStatus } from '~/composables/useAuthStatus';
 import { useUserStore } from '~/stores/user';
 import Swal from 'sweetalert2'
+import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
 
 const sidebarMenu = shallowRef(sidebarItems);
 const sDrawer = ref(false);
-
 const userStore = useUserStore();
 const { isLoggedIn, checkAuthStatus } = useAuthStatus();
 
 function LoadUserProfile() {
-  console.log('userlogin')
+  const { decode } = useJwtDecoder();
+  if(!isLoggedIn) {
+    return;
+  }
+
+  const moph_access_token = localStorage.getItem('moph_access_token');
+  const provider_profile_string = localStorage.getItem('provider_profile');
+  
+  if (!moph_access_token || !provider_profile_string) {
+        console.warn('Missing MOPH token or Provider profile data.');
+        return;
+  }
+  
+  const decodeItems = decode(moph_access_token);
+  
+  if (decodeItems.status === 'success') {
+    const payload = decodeItems.payload;
+    let providerData = null;
+    try {
+      providerData = JSON.parse(provider_profile_string);
+    } catch (e) {
+      console.error("Error parsing provider_profile JSON:", e);
+      return;
+    }
+    const hcodeValue = providerData?.organization?.[0]?.hcode9 || null;
+
+    userStore.setPatientData({ 
+      cid: payload.scopes_detail?.id_card || null,
+      hashCid: payload.scopes_detail?.hash_id_card || null,
+      birthdate: payload.scopes_detail?.birthdate || null,
+      hcode: hcodeValue,
+    });    
+  } else {
+    console.error('MOPH Token decode failed:', decodeItems.error);
+  }   
 }
 
 function handleLogout() {
@@ -32,6 +66,10 @@ function handleLogout() {
 function handleLogin() {
   window.location.href = '/auth/login';
 }
+
+onMounted (()=>{
+  LoadUserProfile();
+});
 
 </script>
 

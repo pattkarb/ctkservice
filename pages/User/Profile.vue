@@ -3,10 +3,17 @@
     <div v-if="isLoading" class="text-center">
     </div>
 
-    <v-card v-if="profile" class="mx-auto" max-width="800">
+    <v-card v-if="office_profile" class="mx-auto" max-width="800">
       <h1>HOSOFFICE</h1>
-      <h2>{{ profile.HR_CID }}</h2>
-      <h2>{{ profile.HR_FNAME }}</h2>
+      <div v-if="imageDataUrl" class="text-center pa-4">
+            <img 
+              :src="imageDataUrl" 
+              alt="HR Profile Image" 
+              style="max-width: 100%; height: auto; border-radius: 8px;"
+            />
+        </div>
+      <h2>{{ office_profile.HR_CID }}</h2>
+      <h2>{{office_profile.HR_FNAME +" "+ office_profile.HR_LNAME }}</h2>
     </v-card>
 
 
@@ -15,6 +22,7 @@
       <h1>หมอพร้อม</h1>
       <h2>{{ moph_profile.email }}</h2>
       <h2>{{ moph_profile.name_th }}</h2>
+      
     </v-card>
 
 
@@ -28,15 +36,18 @@
   import { useAuthStatus } from '~/composables/useAuthStatus';
   import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
   import { useActionApi } from '~/composables/useApi';
-  
+  import { useUserStore } from '~/stores/user';
+  import { useImage } from '~/composables/useImage';
+
   const config = useRuntimeConfig()
   const { isLoggedIn, checkAuthStatus } = useAuthStatus();
   const { decode } = useJwtDecoder();
 
   const moph_profile = ref<any>(null);
-  const profile = ref<any>(null);
+  const office_profile = ref<any>(null);
   const isLoading = ref(true);
-    
+  const userStore = useUserStore();
+
   const showLoadingSwal = () => {
     Swal.fire({
         title: 'กำลังโหลดโปรไฟล์...',
@@ -72,17 +83,16 @@
 const fetchOffice = async () => {
     const apiPayload = {
         "mysqlID": "hosoffice",
-        "queryText": "SELECT *  FROM hr_person LIMIT 1"
+        "queryText": "SELECT *  FROM hr_person WHERE HR_CID="+userStore.ptCID+" LIMIT 1"
     };
     try {
         const result = await selectData(apiPayload); 
-        profile.value = result.data[0];
-        //console.log('ข้อมูลที่ดึงมา:', result.data[0]);
+        office_profile.value = result.data[0];
+        console.log('ข้อมูลที่ดึงมา:', result.data[0]);
     } catch (e) {
         console.error("API Call failed:", e);
     }
 };
-
 
 const fetchProfile = async () => {
  isLoading.value = true;
@@ -92,21 +102,9 @@ const fetchProfile = async () => {
   }
   const profileString = localStorage.getItem("provider_profile");
     try {
-        profile.value = profileString ? JSON.parse(profileString) : null;
+        moph_profile.value = profileString ? JSON.parse(profileString) : null;
     } catch (e) {
         console.error("Error parsing provider_profile:", e);
-    }
-
-  const access_token = localStorage.getItem("moph_access_token") || null;
-    if (access_token) {
-        const decodeResult = decode(access_token);
-        if (decodeResult.status === 'success') {
-            moph_profile.value = decodeResult.payload;
-            console.log(moph_profile)
-        } else {
-            console.error('MOPH Token decode failed:', decodeResult.error);
-        }
-        //console.log('Decoded MOPH Profile:', mophProfile.value);
     }
   isLoading.value = false;
 };

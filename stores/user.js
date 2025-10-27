@@ -1,39 +1,82 @@
-// stores/user.js
 import { defineStore } from 'pinia';
-export const useUserStore = defineStore('user', {
+import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
+import { useTokenExpire } from '~/composables/useTokenExpire';
+import Swal from 'sweetalert2';
+import { useRouter } from 'vue-router';
 
+export const useUserStore = defineStore('user', {
+    
   state: () => ({
-    profile: null,
     isLoggedIn: false,
+    profile: null, 
+    mophProfile: null, 
+    ptCID: null, 
+    ptHashCID: null,
+    ptBirthDate:null,
+    ptHCODE: null,
   }),
 
   getters: {
-    username: (state) => state.profile ? state.profile.name : 'Guest',
-    isAdmin: (state) => state.profile ? state.profile.role === 'admin' : false,
+    isMophTokenExpired: (state) => {
+        if (!state.mophProfile) return true;
+          const { isExpired } = useTokenExpire(state.mophProfile);
+        return isExpired.value;
+    },
+    displayName: (state) => state.profile?.name_th || 'Guest',
   },
 
   actions: {
-    /**
-     * สำหรับเข้าสู่ระบบ (สมมติว่ารับข้อมูลมาแล้ว)
-     * @param {object} userData - ข้อมูลผู้ใช้ที่ได้รับจาก API
-     */
-    login(userData) {
-      this.profile = userData;
-      this.isLoggedIn = true;
+    checkAuthAndLoadProfile() {
+      const { decode } = useJwtDecoder();
+      const profileString = localStorage.getItem("provider_profile");
+      try {
+          this.profile = profileString ? JSON.parse(profileString) : null;
+      } catch (e) {
+          this.profile = null;
+      }
+      const accessToken = localStorage.getItem("moph_access_token");
+      if (accessToken) {
+        const decodeResult = decode(accessToken);
+        if (decodeResult.status === 'success') {
+          this.mophProfile = decodeResult.payload;
+          
+          if (!this.isMophTokenExpired) {
+             this.isLoggedIn = true;
+             return; 
+          }
+        }
+      }
+      
+      this.isLoggedIn = false;
+      this.mophProfile = null;
+      
+      this.clearPatientData();
+    },
+
+    setPatientData(data) {
+        this.ptCID = data.cid || null;
+        this.ptHashCID = data.hashCid || null;
+        this.ptHCODE = data.hcode || null;
+        this.ptBirthDate=data.birthdate || null;
+    },
+
+    clearPatientData() {
+        this.ptCID = null;
+        this.ptHashCID = null;
+        this.ptHCODE = null;
+        this.ptBirthDate = null;
     },
 
     logout() {
-      this.profile = null;
+      localStorage.clear();
       this.isLoggedIn = false;
+      this.profile = null;
+      this.mophProfile = null;
+      this.clearPatientData(); 
+      
+      const router = useRouter(); 
+      router.push('/login');
     },
 
-    async fetchUserProfile() {
-      // สมมติว่านี่คือการเรียก API
-      const data = await new Promise(resolve => setTimeout(() => {
-          resolve({ id: 101, name: 'Alice', email: 'alice@example.com', role: 'user' });
-      }, 500));
-      
-      this.login(data); // เรียก Action 'login' เพื่ออัปเดต State
-    }
   },
 });

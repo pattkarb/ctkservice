@@ -3,9 +3,12 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import Swal from 'sweetalert2'
+import { useUserStore } from '~/stores/user'; 
+import { useLoadingSwal } from '~/composables/useLoadingSwal';
+
+const userStore = useUserStore();
 const config = useRuntimeConfig()
 
-import { useLoadingSwal } from '~/composables/useLoadingSwal';
 const { 
   showLoading, 
   endLoading, 
@@ -58,7 +61,7 @@ onMounted(async () => {
                 localStorage.setItem('moph_expires_in', res.data.data.expires_in);
                 localStorage.setItem('moph_token_type', res.data.data.token_type);
                 // window.location.href = '/';
-
+                
                 try {
                     let url = "https://provider.id.th/api/v1/services/token"
                     data = {

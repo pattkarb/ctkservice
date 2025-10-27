@@ -2,16 +2,24 @@
   <v-container class="py-8">
     <div v-if="isLoading" class="text-center">
     </div>
-    <v-card v-else-if="profile" class="mx-auto" max-width="800">
-      <h2>{{ profile.email }}</h2>
-      <h2>{{ profile.name_th }}</h2>
+
+    <v-card v-if="profile" class="mx-auto" max-width="800">
+      <h1>HOSOFFICE</h1>
+      <h2>{{ profile.HR_CID }}</h2>
+      <h2>{{ profile.HR_FNAME }}</h2>
+    </v-card>
+
+
+
+    <v-card v-if="moph_profile" class="mx-auto" max-width="800">
+      <h1>หมอพร้อม</h1>
+      <h2>{{ moph_profile.email }}</h2>
+      <h2>{{ moph_profile.name_th }}</h2>
     </v-card>
 
 
   </v-container>
-  <v-container>
-    <pre v-if="data">{{ JSON.stringify(data, null, 2) }}</pre>
-  </v-container>
+  
 </template>
 
 <script setup lang="ts">
@@ -20,11 +28,12 @@
   import { useAuthStatus } from '~/composables/useAuthStatus';
   import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
   import { useActionApi } from '~/composables/useApi';
-
+  
+  const config = useRuntimeConfig()
   const { isLoggedIn, checkAuthStatus } = useAuthStatus();
   const { decode } = useJwtDecoder();
 
-  const mophProfile = ref<any>(null);
+  const moph_profile = ref<any>(null);
   const profile = ref<any>(null);
   const isLoading = ref(true);
     
@@ -40,7 +49,7 @@
       });
   };
 
-  const API_BASE_URL = 'http://61.19.112.116:9000/api/data';
+  const API_BASE_URL = config.public.ApiUrl +  '/api/data';
   const { 
       data, 
       loading, 
@@ -67,7 +76,8 @@ const fetchOffice = async () => {
     };
     try {
         const result = await selectData(apiPayload); 
-        console.log('ข้อมูลที่ดึงมา:', result);
+        profile.value = result.data[0];
+        //console.log('ข้อมูลที่ดึงมา:', result.data[0]);
     } catch (e) {
         console.error("API Call failed:", e);
     }
@@ -91,16 +101,14 @@ const fetchProfile = async () => {
     if (access_token) {
         const decodeResult = decode(access_token);
         if (decodeResult.status === 'success') {
-            mophProfile.value = decodeResult.payload;
+            moph_profile.value = decodeResult.payload;
+            console.log(moph_profile)
         } else {
             console.error('MOPH Token decode failed:', decodeResult.error);
         }
         //console.log('Decoded MOPH Profile:', mophProfile.value);
     }
-  
-  
   isLoading.value = false;
-
 };
 
 // 3. ฟังก์ชันสำหรับแก้ไขโปรไฟล์ (ตัวอย่าง)

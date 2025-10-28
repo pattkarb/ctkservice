@@ -8,10 +8,19 @@ import { useUserStore } from '~/stores/user';
 import Swal from 'sweetalert2'
 import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
 
+const config = useRuntimeConfig()
 const sidebarMenu = shallowRef(sidebarItems);
 const sDrawer = ref(false);
 const userStore = useUserStore();
 const { isLoggedIn, checkAuthStatus } = useAuthStatus();
+
+const API_BASE_URL = config.public.ApiUrl +  '/api/data';
+const { 
+      data, 
+      loading, 
+      error, 
+      selectData
+} = useActionApi(API_BASE_URL);
 
 function LoadUserProfile() {
   const { decode } = useJwtDecoder();
@@ -39,17 +48,35 @@ function LoadUserProfile() {
       return;
     }
     const hcodeValue = providerData?.organization?.[0]?.hcode9 || null;
+    const cidValue = payload.scopes_detail?.id_card || null;
 
     userStore.setPatientData({ 
-      cid: payload.scopes_detail?.id_card || null,
+      cid: cidValue,
       hashCid: payload.scopes_detail?.hash_id_card || null,
       birthdate: payload.scopes_detail?.birthdate || null,
       hcode: hcodeValue,
-    });    
+        });
+
   } else {
     console.error('MOPH Token decode failed:', decodeItems.error);
   }   
 }
+
+const fetchImage = async () => {
+    const apiPayload = {
+        "mysqlID": "hosoffice",
+        "queryText": "SELECT *  FROM hr_person WHERE HR_CID="+userStore.ptCID+" LIMIT 1"
+    };
+    try {
+        const result = await selectData(apiPayload); 
+        //console.log('ข้อมูลที่ดึงมา:',JSON.stringify(result.data[0].HR_IMAGE));
+        localStorage.setItem('moph_image', JSON.stringify(result.data[0].HR_IMAGE.data));
+        
+    } catch (e) {
+        console.error("API Call failed:", e);
+    }
+};
+
 
 function handleLogout() {
   localStorage.clear();
@@ -69,6 +96,7 @@ function handleLogin() {
 
 onMounted (()=>{
   LoadUserProfile();
+  fetchImage();
 });
 
 </script>

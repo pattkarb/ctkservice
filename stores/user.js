@@ -14,6 +14,7 @@ export const useUserStore = defineStore('user', {
     ptHashCID: null,
     ptBirthDate:null,
     ptHCODE: null,
+    ptImage: null,
   }),
 
   getters: {
@@ -58,6 +59,7 @@ export const useUserStore = defineStore('user', {
         this.ptHashCID = data.hashCid || null;
         this.ptHCODE = data.hcode || null;
         this.ptBirthDate=data.birthdate || null;
+        this.ptImage=data.hrimage || null;
     },
 
     clearPatientData() {
@@ -65,6 +67,7 @@ export const useUserStore = defineStore('user', {
         this.ptHashCID = null;
         this.ptHCODE = null;
         this.ptBirthDate = null;
+        this.ptImage = null;
     },
 
     logout() {

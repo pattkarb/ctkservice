@@ -1,43 +1,89 @@
 <template>
-  <v-container class="py-8">
-    <div v-if="isLoading" class="text-center">
-    </div>
+  <v-container v-if="office_profile" class="py-8 Sarabun">
+    <v-card class="mx-auto" elevation="4">
+      <v-card-title class="bg-primary text-white">
+        <v-icon left>mdi-account-circle</v-icon> ข้อมูลผู้ใช้งานระบบ
+      </v-card-title>
+      <v-row no-gutters>
+        <v-col cols="12" md="4" class="pa-4 text-center">
+          <div class="user-avatar-container">
+            
+              <img 
+               :src="imageURL" 
+                alt="รูปภาพจาก localStorage" 
+                style="max-width: 200px; height: auto; border: 1px solid #ccc;"
+              >
+            
+            <v-icon size="120" color="grey lighten-1">mdi-account-circle</v-icon>
 
-    <v-card v-if="office_profile" class="mx-auto" max-width="800">
-      <h1>HOSOFFICE</h1>
-      <div v-if="imageDataUrl" class="text-center pa-4">
-            <img 
-              :src="imageDataUrl" 
-              alt="HR Profile Image" 
-              style="max-width: 100%; height: auto; border-radius: 8px;"
-            />
-        </div>
-      <h2>{{ office_profile.HR_CID }}</h2>
-      <h2>{{office_profile.HR_FNAME +" "+ office_profile.HR_LNAME }}</h2>
-    </v-card>
+            <p class="mt-2 text-subtitle-1 font-weight-bold">
+              {{ office_profile.HR_FNAME +" "+ office_profile.HR_LNAME }}
+            </p>
+          </div>
+        </v-col>
 
+        <v-col cols="12" md="8" class="pa-4">
+          <v-list dense>
+            <v-list-item>
+              <v-list-item-icon><v-icon>mdi-email</v-icon></v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title class="font-weight-bold">อีเมล</v-list-item-title>
+                <v-list-item-subtitle>{{ userStore.profile?.email || 'N/A' }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
 
+            <v-divider></v-divider>
 
-    <v-card v-if="moph_profile" class="mx-auto" max-width="800">
-      <h1>หมอพร้อม</h1>
-      <h2>{{ moph_profile.email }}</h2>
-      <h2>{{ moph_profile.name_th }}</h2>
+            <v-list-item>
+              <v-list-item-icon><v-icon>mdi-id-card</v-icon></v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title class="font-weight-bold">เลขบัตรประชาชน (CID)</v-list-item-title>
+                <v-list-item-subtitle>{{ userStore.ptCID || 'N/A' }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-icon><v-icon>mdi-hospital-box</v-icon></v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title class="font-weight-bold">H-CODE ที่ผูกกับระบบ</v-list-item-title>
+                <v-list-item-subtitle>{{ userStore.ptHCODE || 'N/A' }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            
+            <v-divider></v-divider>
+
+            <v-list-item>
+              <v-list-item-icon><v-icon :color="userStore.isMophTokenExpired ? 'error' : 'success'">mdi-shield-check</v-icon></v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title class="font-weight-bold">สถานะ MOPH Token</v-list-item-title>
+                <v-list-item-subtitle :class="userStore.isMophTokenExpired ? 'text-red' : 'text-green'">
+                  {{ userStore.isMophTokenExpired ? 'หมดอายุแล้ว / ไม่ถูกต้อง' : 'ใช้งานได้' }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+
+          </v-list>
+        </v-col>
+      </v-row>
+      
+      <v-card-actions class="justify-end">
+        <v-btn color="error" @click="userStore.logout">
+          <v-icon left>mdi-logout</v-icon> Logout
+        </v-btn>
+      </v-card-actions>
       
     </v-card>
-
-
   </v-container>
-  
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, reactive } from "vue";
+  import { ref, onMounted, reactive, watch } from "vue";
   import Swal from 'sweetalert2';
   import { useAuthStatus } from '~/composables/useAuthStatus';
   import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
   import { useActionApi } from '~/composables/useApi';
   import { useUserStore } from '~/stores/user';
-  import { useImage } from '~/composables/useImage';
+  import { useImage } from '~/composables/useImage.js';
 
   const config = useRuntimeConfig()
   const { isLoggedIn, checkAuthStatus } = useAuthStatus();
@@ -47,6 +93,10 @@
   const office_profile = ref<any>(null);
   const isLoading = ref(true);
   const userStore = useUserStore();
+  
+  const imageBufferArray = ref(null);
+  const MIME_TYPE = 'image/jpeg';
+  const { imageURL } = useImage(imageBufferArray, MIME_TYPE);
 
   const showLoadingSwal = () => {
     Swal.fire({
@@ -59,6 +109,32 @@
         }
       });
   };
+
+const loadImageFromStorage = () => {
+  const mophImageString = localStorage.getItem('moph_image');
+  if (mophImageString) {
+    try {
+      let dataToParse = mophImageString.trim();
+      let numberArray;
+      if (dataToParse.startsWith('[') && dataToParse.endsWith(']')) {
+          numberArray = JSON.parse(dataToParse);
+      } else {
+          numberArray = dataToParse.split(',').map(s => parseInt(s.trim(), 10));
+      }
+      imageBufferArray.value = numberArray.filter(n => !isNaN(n) && n >= 0 && n <= 255); 
+      if (imageBufferArray.value.length === 0) {
+          console.error("Conversion failed: Resulting array is empty or contains invalid data.");
+      }
+
+    } catch (e) {
+      console.error("Error parsing/converting moph_image from localStorage:", e);
+      imageBufferArray.value = null;
+    }
+  } else {
+      console.warn("moph_image not found in localStorage.");
+      imageBufferArray.value = null;
+  }
+};
 
   const API_BASE_URL = config.public.ApiUrl +  '/api/data';
   const { 
@@ -88,7 +164,7 @@ const fetchOffice = async () => {
     try {
         const result = await selectData(apiPayload); 
         office_profile.value = result.data[0];
-        console.log('ข้อมูลที่ดึงมา:', result.data[0]);
+        //console.log('ข้อมูลที่ดึงมา:',result.data[0].HR_IMAGE);
     } catch (e) {
         console.error("API Call failed:", e);
     }
@@ -121,9 +197,21 @@ useHead({
   meta: [{ name: "description", content: "แสดงข้อมูลโปรไฟล์ของผู้ใช้งานระบบ" }],
 });
 
-onMounted(()=>{
+watch(imageURL, (newUrl) => {
+    console.log('Image URL ถูกอัปเดตเป็น:', newUrl);
+    if (newUrl && newUrl.startsWith('blob:')) {
+        console.log('SUCCESS: Object URL ถูกสร้างแล้ว!');
+    } else if (newUrl && newUrl.startsWith('data:')) {
+        console.log('SUCCESS: Data URL ถูกสร้างแล้ว!');
+    } else {
+        console.log('FAIL: imageURL เป็น null/undefined');
+    }
+});
+
+onMounted(async ()=>{
   fetchProfile();
   fetchOffice();
+  loadImageFromStorage();
 });
 
 </script>

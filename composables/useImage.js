@@ -1,43 +1,36 @@
-import { ref, watch, onUnmounted } from 'vue';
+import { ref } from 'vue';
 
-export function useImage(imageBufferData, mimeType = 'image/jpeg') {
-    const imageURL = ref(null);
-    let objectURL = null;
-
-    const convertBufferToURL = (dataArray, type) => {
-        if (!dataArray || dataArray.length === 0) {
-            imageURL.value = null;
-            return;
+/**
+ * Composable สำหรับแปลงข้อมูลรูปภาพ Buffer Array เป็น Base64 Data URL
+ * * @param {object | null} bufferData - Object ที่มีโครงสร้าง { type: 'Buffer', data: number[] } หรือ null
+ * @param {string} mimeType - ประเภทของไฟล์รูปภาพ (เช่น 'image/jpeg', 'image/png')
+ * @returns {{ imageDataUrl: Ref<string|null> }}
+ */
+export function useImage(bufferData, mimeType = 'image/jpeg') {
+    const imageDataUrl = ref(null);
+    const convertBufferToBase64 = (bufferData) => {
+        if (!bufferData || !bufferData.data || bufferData.type !== 'Buffer' || bufferData.data.length === 0) {
+            return null;
         }
 
-        const byteArray = new Uint8Array(dataArray);
-        const blob = new Blob([byteArray], { type: type });
-        if (objectURL) {
-            URL.revokeObjectURL(objectURL);
+        try {
+            const buffer = new Uint8Array(bufferData.data);
+            let binary = '';
+            for (let i = 0; i < buffer.length; i++) {
+                binary += String.fromCharCode(buffer[i]);
+            }          
+            const base64 = btoa(binary);
+            return `data:${mimeType};base64,${base64}`;
+        } catch (e) {
+            console.error("Error converting buffer to Base64:", e);
+            return null;
         }
-        objectURL = URL.createObjectURL(blob);
-        imageURL.value = objectURL;
     };
-    watch(() => imageBufferData, (newData) => {
-        const dataArray = newData && newData.type === 'Buffer' 
-                          ? newData.data 
-                          : Array.isArray(newData) 
-                              ? newData 
-                              : null;                            
-        if (dataArray) {
-            convertBufferToURL(dataArray, mimeType);
-        } else {
-            imageURL.value = null;
-        }
-    }, { immediate: true });
-    onUnmounted(() => {
-        if (objectURL) {
-            URL.revokeObjectURL(objectURL);
-            objectURL = null;
-        }
-    });
+    watch(() => bufferData, (newBufferData) => {
+        imageDataUrl.value = convertBufferToBase64(newBufferData);
+    }, { immediate: true, deep: true }); 
 
     return {
-        imageURL,
+        imageDataUrl,
     };
 }

@@ -69,8 +69,8 @@ const fetchImage = async () => {
     };
     try {
         const result = await selectData(apiPayload); 
-        //console.log('ข้อมูลที่ดึงมา:',JSON.stringify(result.data[0].HR_IMAGE));
-        localStorage.setItem('moph_image', JSON.stringify(result.data[0].HR_IMAGE.data));
+        console.log('ข้อมูลที่ดึงมา:',JSON.stringify(result.data[0].HR_IMAGE));
+        localStorage.setItem('moph_image', JSON.stringify(result.data[0].HR_IMAGE));
         
     } catch (e) {
         console.error("API Call failed:", e);

@@ -8,12 +8,7 @@
         <v-col cols="12" md="4" class="pa-4 text-center">
           <div class="user-avatar-container">
             
-              <img 
-               :src="imageURL" 
-                alt="รูปภาพจาก localStorage" 
-                style="max-width: 200px; height: auto; border: 1px solid #ccc;"
-              >
-            
+            <img :src="imageDataUrl" v-if="imageDataUrl" alt="Profile Image" />
             <v-icon size="120" color="grey lighten-1">mdi-account-circle</v-icon>
 
             <p class="mt-2 text-subtitle-1 font-weight-bold">
@@ -83,7 +78,7 @@
   import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
   import { useActionApi } from '~/composables/useApi';
   import { useUserStore } from '~/stores/user';
-  import { useImage } from '~/composables/useImage.js';
+  import { useImage } from '~/composables/useImage';
 
   const config = useRuntimeConfig()
   const { isLoggedIn, checkAuthStatus } = useAuthStatus();
@@ -94,9 +89,8 @@
   const isLoading = ref(true);
   const userStore = useUserStore();
   
-  const imageBufferArray = ref(null);
-  const MIME_TYPE = 'image/jpeg';
-  const { imageURL } = useImage(imageBufferArray, MIME_TYPE);
+  const hrImageBuffer = ref(null);
+  const { imageDataUrl } = useImage(hrImageBuffer, 'image/png');
 
   const showLoadingSwal = () => {
     Swal.fire({
@@ -110,30 +104,21 @@
       });
   };
 
-const loadImageFromStorage = () => {
-  const mophImageString = localStorage.getItem('moph_image');
-  if (mophImageString) {
-    try {
-      let dataToParse = mophImageString.trim();
-      let numberArray;
-      if (dataToParse.startsWith('[') && dataToParse.endsWith(']')) {
-          numberArray = JSON.parse(dataToParse);
-      } else {
-          numberArray = dataToParse.split(',').map(s => parseInt(s.trim(), 10));
-      }
-      imageBufferArray.value = numberArray.filter(n => !isNaN(n) && n >= 0 && n <= 255); 
-      if (imageBufferArray.value.length === 0) {
-          console.error("Conversion failed: Resulting array is empty or contains invalid data.");
-      }
-
-    } catch (e) {
-      console.error("Error parsing/converting moph_image from localStorage:", e);
-      imageBufferArray.value = null;
+const fetchImage = async () => {
+    const mophImageString = localStorage.getItem('moph_image');
+    if (mophImageString) {
+        try {
+            const mophImageObject = JSON.parse(mophImageString);
+            hrImageBuffer.value = mophImageObject; 
+            console.log("Image buffer loaded and parsed successfully.");
+        } catch (e) {
+            console.error("Error parsing moph_image JSON from localStorage:", e);
+            hrImageBuffer.value = null; // ล้างค่าหากมีข้อผิดพลาดในการ parse
+        }
+    } else {
+        console.log("No 'moph_image' found in localStorage.");
+        hrImageBuffer.value = null;
     }
-  } else {
-      console.warn("moph_image not found in localStorage.");
-      imageBufferArray.value = null;
-  }
 };
 
   const API_BASE_URL = config.public.ApiUrl +  '/api/data';
@@ -197,22 +182,14 @@ useHead({
   meta: [{ name: "description", content: "แสดงข้อมูลโปรไฟล์ของผู้ใช้งานระบบ" }],
 });
 
-watch(imageURL, (newUrl) => {
-    console.log('Image URL ถูกอัปเดตเป็น:', newUrl);
-    if (newUrl && newUrl.startsWith('blob:')) {
-        console.log('SUCCESS: Object URL ถูกสร้างแล้ว!');
-    } else if (newUrl && newUrl.startsWith('data:')) {
-        console.log('SUCCESS: Data URL ถูกสร้างแล้ว!');
-    } else {
-        console.log('FAIL: imageURL เป็น null/undefined');
-    }
-});
+
 
 onMounted(async ()=>{
   fetchProfile();
   fetchOffice();
-  loadImageFromStorage();
+  fetchImage();
 });
+
 
 </script>
 

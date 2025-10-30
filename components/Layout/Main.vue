@@ -65,13 +65,21 @@ function LoadUserProfile() {
 const fetchImage = async () => {
     const apiPayload = {
         "mysqlID": "hosoffice",
-        "queryText": "SELECT *  FROM hr_person WHERE HR_CID="+userStore.ptCID+" LIMIT 1"
+        "queryText": "SELECT HR_IMAGE  FROM hr_person WHERE HR_CID="+userStore.ptCID+" LIMIT 1"
     };
     try {
         const result = await selectData(apiPayload); 
-        //console.log('ข้อมูลที่ดึงมา:',JSON.stringify(result.data[0].HR_IMAGE));
-        localStorage.setItem('moph_image', JSON.stringify(result.data[0].HR_IMAGE));
-        
+        if (result) {
+            //console.log('ข้อมูลที่ดึงมา:',JSON.stringify(result.data[0].HR_IMAGE));
+            localStorage.setItem('moph_image', JSON.stringify(result.data[0].HR_IMAGE));
+            userStore.setMember({
+              member:  true,
+            });
+        } else {
+          userStore.setMember({
+            member: false,
+          });
+        }
     } catch (e) {
         console.error("API Call failed:", e);
     }

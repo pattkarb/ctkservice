@@ -11,7 +11,7 @@ const showToast = (icon, title) => {
         icon: icon,
         title: title,
         toast: true,
-        position: 'top-end',
+        position: 'bottom-end',
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
@@ -47,7 +47,7 @@ export function useActionApi(baseUrl) {
             showConfirmButton: false,
             didOpen: () => Swal.showLoading(),
             toast: true,
-            position: 'top-end'
+            position: 'bottom-end'
         });
 
         const config = useRuntimeConfig();

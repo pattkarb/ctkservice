@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', {
     
   state: () => ({
     isLoggedIn: false,
+    isMember: false,
     profile: null, 
     mophProfile: null, 
     ptCID: null, 
@@ -53,6 +54,10 @@ export const useUserStore = defineStore('user', {
       
       this.clearPatientData();
     },
+   
+    setMember(data){
+      this.isMember = data.member || false;
+    },
 
     setPatientData(data) {
         this.ptCID = data.cid || null;
@@ -73,6 +78,7 @@ export const useUserStore = defineStore('user', {
     logout() {
       localStorage.clear();
       this.isLoggedIn = false;
+      this.isMember = false;
       this.profile = null;
       this.mophProfile = null;
       this.clearPatientData(); 

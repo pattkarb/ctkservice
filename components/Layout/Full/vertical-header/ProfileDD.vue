@@ -3,6 +3,10 @@ import { ref } from "vue";
 import { UserIcon, MailIcon, ListCheckIcon } from 'vue-tabler-icons';
 import Swal from 'sweetalert2'
 
+const userStore = useUserStore();
+const { isLoggedIn, checkAuthStatus } = useAuthStatus();
+const isMembers = userStore.isMember;
+
 function handleLogout() {
   localStorage.clear();
   Swal.fire({
@@ -14,18 +18,23 @@ function handleLogout() {
     window.location.href = '/'; 
   });
 }
-
+onMounted (()=>{ 
+    
+});
 </script>
 
 <template>
-    <!-- ---------------------------------------------- -->
-    <!-- notifications DD -->
-    <!-- ---------------------------------------------- -->
-    <v-menu :close-on-content-click="false">
+    <v-menu 
+        v-if="isLoggedIn"
+        :close-on-content-click="false"
+        >
         <template v-slot:activator="{ props }">
             <v-btn class="" variant="text" v-bind="props" icon>
-                <v-avatar size="35">
+                <v-avatar v-if="isMembers" size="35">
                     <img src="/images/profile/user-1.jpg" height="35" alt="user" />
+                </v-avatar>
+                <v-avatar v-else size="35">
+                    <img src="/images/profile/user-2.jpg" height="35" alt="user" />
                 </v-avatar>
             </v-btn>
         </template>

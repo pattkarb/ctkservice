@@ -7,9 +7,14 @@
       <v-row no-gutters>
         <v-col cols="12" md="4" class="pa-4 text-center">
           <div class="user-avatar-container">
-            
-            <img :src="imageDataUrl" v-if="imageDataUrl" alt="Profile Image" />
-            <v-icon size="120" color="grey lighten-1">mdi-account-circle</v-icon>
+            <div v-if="imageURL">
+              <img 
+                :src="imageURL" 
+                alt="รูปภาพโปรไฟล์" 
+                style="max-width: 250px; height: auto;"
+              >
+            </div>
+            <v-icon v-else="imageURL" size="120" color="grey lighten-1">mdi-account-circle</v-icon>
 
             <p class="mt-2 text-subtitle-1 font-weight-bold">
               {{ office_profile.HR_FNAME +" "+ office_profile.HR_LNAME }}
@@ -90,7 +95,8 @@
   const userStore = useUserStore();
   
   const hrImageBuffer = ref(null);
-  const { imageDataUrl } = useImage(hrImageBuffer, 'image/png');
+  const MIME_TYPE = 'image/jpeg'; 
+  const { imageURL } = useImage(hrImageBuffer, 'image/jpeg');
 
   const showLoadingSwal = () => {
     Swal.fire({
@@ -107,14 +113,16 @@
 const fetchImage = async () => {
     const mophImageString = localStorage.getItem('moph_image');
     if (mophImageString) {
-        try {
-            const mophImageObject = JSON.parse(mophImageString);
-            hrImageBuffer.value = mophImageObject; 
-            console.log("Image buffer loaded and parsed successfully.");
-        } catch (e) {
-            console.error("Error parsing moph_image JSON from localStorage:", e);
-            hrImageBuffer.value = null; // ล้างค่าหากมีข้อผิดพลาดในการ parse
-        }
+        const mophImageArray = JSON.parse(mophImageString);
+        //console.log(mophImageJson.data)
+        const imageData = mophImageArray.data;
+        if (Array.isArray(imageData) && imageData.length > 0) {
+                console.log('พบ Array of bytes, กำลังส่งไปแปลง...');               
+                hrImageBuffer.value = imageData; 
+            } else {
+                 console.error("Data is not a valid Array or is empty.");
+                 hrImageBuffer.value = null;
+            }
     } else {
         console.log("No 'moph_image' found in localStorage.");
         hrImageBuffer.value = null;
@@ -184,13 +192,11 @@ useHead({
 
 
 
-onMounted(async ()=>{
+onMounted(()=>{
   fetchProfile();
   fetchOffice();
   fetchImage();
 });
-
-
 </script>
 
 <style scoped>

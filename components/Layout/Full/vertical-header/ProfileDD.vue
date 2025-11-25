@@ -7,6 +7,11 @@ const userStore = useUserStore();
 const { isLoggedIn, checkAuthStatus } = useAuthStatus();
 const isMembers = userStore.isMember;
 
+const hrImageBuffer = ref(null);
+const MIME_TYPE = 'image/jpeg'; 
+const { imageURL } = useImage(hrImageBuffer, 'image/jpeg');
+
+
 function handleLogout() {
   localStorage.clear();
   Swal.fire({
@@ -18,11 +23,30 @@ function handleLogout() {
     window.location.href = '/'; 
   });
 }
-onMounted (()=>{ 
-    
+
+const fetchImage = async () => {
+    const mophImageString = localStorage.getItem('moph_image');
+    if (mophImageString) {
+        const mophImageArray = JSON.parse(mophImageString);
+        //console.log('--->', mophImageJson.data)
+        const imageData = mophImageArray.data;
+        if (Array.isArray(imageData) && imageData.length > 0) {
+                console.log('พบ Array of bytes, กำลังส่งไปแปลง...');               
+                hrImageBuffer.value = imageData; 
+            } else {
+                console.error("Data is not a valid Array or is empty.");
+                hrImageBuffer.value = null;
+            }
+    } else {
+        console.log("No 'moph_image' found in localStorage.");
+        hrImageBuffer.value = null;
+    }
+};
+
+onMounted (async()=>{ 
+    await fetchImage();   
 });
 </script>
-
 <template>
     <v-menu 
         v-if="isLoggedIn"
@@ -31,10 +55,12 @@ onMounted (()=>{
         <template v-slot:activator="{ props }">
             <v-btn class="" variant="text" v-bind="props" icon>
                 <v-avatar v-if="isMembers" size="35">
-                    <img src="/images/profile/user-1.jpg" height="35" alt="user" />
+                    <img 
+                        :src="imageURL" 
+                        height="45" alt="1" />
                 </v-avatar>
                 <v-avatar v-else size="35">
-                    <img src="/images/profile/user-2.jpg" height="35" alt="user" />
+                    <img src="/images/profile/user-1.jpg" height="35" alt="2" />
                 </v-avatar>
             </v-btn>
         </template>

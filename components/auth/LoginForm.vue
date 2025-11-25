@@ -4,7 +4,7 @@ import { useRuntimeConfig } from '#app';
 
 const config = useRuntimeConfig();
 
-let health_link = "https://moph.id.th";
+let health_link = 'https://moph.id.th';
 let client_id = config.public.ClientId;
 let response_type = "code";
 let redirect_uri = ref(''); 

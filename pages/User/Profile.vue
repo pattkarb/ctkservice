@@ -10,19 +10,19 @@
             <div v-if="imageURL">
               <img 
                 :src="imageURL" 
-                alt="รูปภาพโปรไฟล์" 
+                alt="Profile" 
                 style="max-width: 250px; height: auto;"
               >
             </div>
             <v-icon v-else="imageURL" size="120" color="grey lighten-1">mdi-account-circle</v-icon>
 
-            <p class="mt-2 text-subtitle-1 font-weight-bold">
+            <p class="mt-2 font-weight-bold">
               {{ office_profile.HR_FNAME +" "+ office_profile.HR_LNAME }}
             </p>
           </div>
         </v-col>
 
-        <v-col cols="12" md="8" class="pa-4">
+        <v-col cols="12" md="8" class="pa-2">
           <v-list dense>
             <v-list-item>
               <v-list-item-icon><v-icon>mdi-email</v-icon></v-list-item-icon>
@@ -120,8 +120,8 @@ const fetchImage = async () => {
                 console.log('พบ Array of bytes, กำลังส่งไปแปลง...');               
                 hrImageBuffer.value = imageData; 
             } else {
-                 console.error("Data is not a valid Array or is empty.");
-                 hrImageBuffer.value = null;
+                console.error("Data is not a valid Array or is empty.");
+                hrImageBuffer.value = null;
             }
     } else {
         console.log("No 'moph_image' found in localStorage.");

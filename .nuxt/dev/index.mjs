@@ -650,7 +650,7 @@ const _inlineRuntimeConfig = {
     "SecretId": "b9e8684a5b8aad3d49e6387c0a8e8bc70c7ccee2",
     "ClientId1": "66f416cd-3945-4ff2-8ef8-ee7b8219d0d0",
     "SecretId1": "F1vlLszBVL5gzYI5u6WjlAfrBN1G4Msx",
-    "ApiUrl": "http://61.19.112.116:9000",
+    "ApiUrl": "http://172.31.102.20:9000",
     "ApiKey": "be38ab3502272dda80786cbca7f9a9da"
   }
 };

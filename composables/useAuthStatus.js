@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
 import { useTokenExpire } from '~/composables/useTokenExpire'; 

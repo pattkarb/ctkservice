@@ -160,7 +160,10 @@ onMounted (async ()=>{
           </div>
           <div>
             <LayoutFullVerticalHeaderNotificationDD v-if="isLoggedIn" />
-            <LayoutFullVerticalHeaderProfileDD v-if="isLoggedIn"  />
+            <LayoutFullVerticalHeaderProfileDD 
+                v-if="isLoggedIn" 
+                :key="isLoggedIn ? 'logged-in' : 'logged-out'"
+            />
             <v-btn v-if="isLoggedIn" color="error" @click="handleLogout">
               Logout
             </v-btn>

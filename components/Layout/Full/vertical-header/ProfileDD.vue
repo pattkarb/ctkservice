@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { UserIcon, MailIcon, ListCheckIcon } from 'vue-tabler-icons';
 import Swal from 'sweetalert2'
 
@@ -9,6 +9,7 @@ const { isLoggedIn, checkAuthStatus } = useAuthStatus();
 const isMembers = computed(() => userStore.isMember);
 const isComponentLoading = ref(true);
 
+const profileData = ref(null);
 
 const hrImageBuffer = ref<number[] | null>(null);
 const MIME_TYPE = 'image/jpeg'; 
@@ -24,6 +25,10 @@ function handleLogout() {
   }).then(() => {
     window.location.href = '/'; 
   });
+}
+
+const fetchProfileData = async () =>{
+    profileData.value = JSON.parse(localStorage.getItem('user_profile_data') || 'null');
 }
 
 const fetchImage = async () => {
@@ -48,6 +53,7 @@ const fetchImage = async () => {
 onMounted (async()=>{ 
     await fetchImage();   
     isComponentLoading.value = false;
+    await fetchProfileData()
 });
 </script>
 <template>

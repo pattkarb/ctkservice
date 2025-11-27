@@ -1,40 +1,36 @@
-import { ref, watch, onUnmounted } from 'vue';
-/**
- *   @param {import('vue').Ref<Array<number> | null>} imageByteArrayRef 
- *   @param {string} mimeType 
- *   @returns {object} 
-*/
-export function useImage(imageByteArrayRef, mimeType = 'image/jpeg') {
-    const imageURL = ref(null);
-    let objectURL = null;
-    const convertBytesToURL = (dataArray, type) => {
-        if (!dataArray || dataArray.length === 0) {
-            imageURL.value = null;
-            return;
+import { ref, watch, computed } from 'vue';
+
+export const useImage = (byteArrayRef: Ref<number[] | null>, mimeType: string) => {
+    // ใช้ computed เพื่อให้ imageURL อัปเดตเมื่อ byteArrayRef เปลี่ยน
+    const imageURL = computed(() => {
+        const byteArray = byteArrayRef.value;
+        
+        if (!byteArray || byteArray.length === 0) {
+            return ''; // คืนค่าว่างถ้าไม่มีข้อมูล
         }
-        const byteArray = new Uint8Array(dataArray);
-        const blob = new Blob([byteArray], { type: type });
-        if (objectURL) {
-            URL.revokeObjectURL(objectURL);
+        
+        try {
+            // 1. แปลง Array ของตัวเลข ให้เป็น Typed Array (Uint8Array)
+            const uInt8Array = new Uint8Array(byteArray); 
+            
+            // 2. สร้าง Blob
+            const blob = new Blob([uInt8Array], { type: mimeType });
+            
+            // 3. สร้าง Object URL
+            return URL.createObjectURL(blob);
+            
+        } catch (e) {
+            console.error("Error creating Object URL from byte array:", e);
+            return '';
         }
-        objectURL = URL.createObjectURL(blob);
-        imageURL.value = objectURL;
-    };
-    watch(imageByteArrayRef, (newByteArray) => {
-        if (Array.isArray(newByteArray) && newByteArray.length > 0) {
-            convertBytesToURL(newByteArray, mimeType);
-        } else {
-            imageURL.value = null;
-        }
-    }, { immediate: true });
+    });
+    
+    // สำคัญ: ต้องดูแลการล้าง Object URL เมื่อ Component ถูก unmount เพื่อป้องกัน Memory Leak
     onUnmounted(() => {
-        if (objectURL) {
-            URL.revokeObjectURL(objectURL);
-            objectURL = null;
+        if (imageURL.value) {
+            URL.revokeObjectURL(imageURL.value);
         }
     });
 
-    return {
-        imageURL,
-    };
-}
+    return { imageURL };
+};

@@ -83,7 +83,7 @@
   import { useJwtDecoder } from '~/composables/userJwtDecoder'; 
   import { useActionApi } from '~/composables/useApi';
   import { useUserStore } from '~/stores/user';
-  import { useImage } from '~/composables/useImage';
+  import { useImage } from '~/composables/useImage_back';
 
   const config = useRuntimeConfig()
   const { isLoggedIn, checkAuthStatus } = useAuthStatus();

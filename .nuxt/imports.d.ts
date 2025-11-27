@@ -30,7 +30,7 @@ export { requestIdleCallback, cancelIdleCallback } from '#app/compat/idle-callba
 export { setInterval } from '#app/compat/interval';
 export { useActionApi } from '../composables/useApi';
 export { useAuthStatus } from '../composables/useAuthStatus';
-export { useImage } from '../composables/useImage';
+export { useImage } from '../composables/useImage_back';
 export { useLoadingSwal } from '../composables/useLoadingSwal';
 export { useTokenExpire } from '../composables/useTokenExpire';
 export { useJwtDecoder } from '../composables/userJwtDecoder';

@@ -102,9 +102,9 @@ function handleLogin() {
   window.location.href = '/auth/login';
 }
 
-onMounted (()=>{
+onMounted (async ()=>{
   LoadUserProfile();
-  fetchImage();
+  await fetchImage();
 });
 
 </script>
@@ -160,14 +160,13 @@ onMounted (()=>{
           </div>
           <div>
             <LayoutFullVerticalHeaderNotificationDD v-if="isLoggedIn" />
-            <LayoutFullVerticalHeaderProfileDD v-if="isLoggedIn" />
+            <LayoutFullVerticalHeaderProfileDD v-if="isLoggedIn"  />
             <v-btn v-if="isLoggedIn" color="error" @click="handleLogout">
               Logout
             </v-btn>
             <v-btn v-else color="primary" @click="handleLogin">
               Login
             </v-btn>
-            
           </div>
         </div>
       </v-app-bar>
